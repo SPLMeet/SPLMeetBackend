@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.1.2'
 	id 'io.spring.dependency-management' version '1.1.2'
+	id 'checkstyle'
 }
 
 group = 'com.back'
@@ -29,6 +30,13 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+checkstyle {
+    maxWarnings = 0 // 규칙이 어긋나는 코드가 하나라도 있을 경우 빌드 fail을 내고 싶다면 이 선언을 추가한다.
+    configFile = file("${rootDir}/naver-checkstyle-rules.xml")
+    configProperties = ["suppressionFile" : "${rootDir}/naver-checkstyle-suppressions.xml"]
+    toolVersion ="8.24"  // checkstyle 버전 8.24 이상 선언
 }
 
 tasks.named('test') {
