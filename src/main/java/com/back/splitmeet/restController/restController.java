@@ -5,6 +5,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 @RestController
 public class controller {
     @RequestMapping(value = "/api/test", method = RequestMethod.GET)
@@ -13,7 +16,7 @@ public class controller {
     }
 
     @RequestMapping(value = "/api/groupBuy", method = RequestMethod.POST)
-    public String restGroupBuy(@RequestParam Integer localID, @RequestParam Integer peopleNum) {
+    public String restGroupBuy(@RequestParam Long localID, @RequestParam Integer peopleNum) {
         return "done";
     }
 }
