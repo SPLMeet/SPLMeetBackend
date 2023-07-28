@@ -10,4 +10,14 @@ public class SplitmeetApplication {
 		SpringApplication.run(SplitmeetApplication.class, args);
 	}
 
+
+
+
+
+
+
+
+
+
+
 }
