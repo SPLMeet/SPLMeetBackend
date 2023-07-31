@@ -9,9 +9,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Table(name = "generalPostImg")
 @Getter
 @Setter
-@Table(name = "generalPostImg")
 public class generalPostImg {
 	@Id
 	@GeneratedValue
