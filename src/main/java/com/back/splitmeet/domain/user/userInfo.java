@@ -59,8 +59,8 @@ public class userInfo {
 	private List<payList> orders = new ArrayList<>();
 
 	@Builder
-	public userInfo(String email, String nickname, KakaoApiClient.OAuthProvider oAuthProvider) {
-		this.userEmail = email;
+	public userInfo(String userEmail, String nickname, KakaoApiClient.OAuthProvider oAuthProvider) {
+		this.userEmail = userEmail;
 		this.userName = nickname;
 		this.oAuthProvider = oAuthProvider;
 	}

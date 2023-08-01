@@ -20,19 +20,19 @@ public class OAuthLoginService {
 
 	public AuthTokens login(KakaoLoginParams params) {
 		OAuthInfoResponse oAuthInfoResponse = requestOAuthInfoService.request(params);
-		Long memberId = findOrCreateMember(oAuthInfoResponse);
-		return authTokensGenerator.generate(memberId);
+		Long useId = findOrCreateUserInfo(oAuthInfoResponse);
+		return authTokensGenerator.generate(useId);
 	}
 
-	private Long findOrCreateMember(OAuthInfoResponse oAuthInfoResponse) {
-		return userinfoRepository.findByEmail(oAuthInfoResponse.getEmail())
+	private Long findOrCreateUserInfo(OAuthInfoResponse oAuthInfoResponse) {
+		return userinfoRepository.findByuserEmail(oAuthInfoResponse.getEmail())
 			.map(userInfo::getUserId)
-			.orElseGet(() -> newMember(oAuthInfoResponse));
+			.orElseGet(() -> newUserInfo(oAuthInfoResponse));
 	}
 
-	private Long newMember(OAuthInfoResponse oAuthInfoResponse) {
+	private Long newUserInfo(OAuthInfoResponse oAuthInfoResponse) {
 		userInfo userinfo = userInfo.builder()
-			.email(oAuthInfoResponse.getEmail())
+			.userEmail(oAuthInfoResponse.getEmail())
 			.nickname(oAuthInfoResponse.getNickname())
 			.oAuthProvider(oAuthInfoResponse.getOAuthProvider())
 			.build();
