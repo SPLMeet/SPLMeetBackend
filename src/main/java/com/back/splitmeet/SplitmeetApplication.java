@@ -9,5 +9,4 @@ public class SplitmeetApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SplitmeetApplication.class, args);
 	}
-
 }
