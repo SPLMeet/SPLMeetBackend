@@ -1,4 +1,4 @@
-package com.back.splitmeet.controller;
+package com.back.splitmeet.controller.user;
 
 import java.util.List;
 
@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.splitmeet.repository.userInfoRepository;
+import com.back.splitmeet.service.user.token.AuthTokensGenerator;
 import com.back.splitmeet.user.entity.Member;
-import com.back.splitmeet.user.repository.userInfoRepository;
-import com.back.splitmeet.user.token.AuthTokensGenerator;
 
 import lombok.RequiredArgsConstructor;
 

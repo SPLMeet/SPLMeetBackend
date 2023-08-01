@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.back.splitmeet.domain.Pay.payList;
-import com.back.splitmeet.user.KakaoApiClient;
+import com.back.splitmeet.service.user.KakaoApiClient;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

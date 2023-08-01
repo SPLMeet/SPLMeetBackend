@@ -3,11 +3,11 @@ package com.back.splitmeet.service.user;
 import org.springframework.stereotype.Service;
 
 import com.back.splitmeet.domain.user.userInfo;
-import com.back.splitmeet.dto.OAuthInfoResponse;
-import com.back.splitmeet.user.KakaoLoginParams;
-import com.back.splitmeet.user.repository.userInfoRepository;
-import com.back.splitmeet.user.token.AuthTokens;
-import com.back.splitmeet.user.token.AuthTokensGenerator;
+import com.back.splitmeet.dto.user.KakaoLoginParams;
+import com.back.splitmeet.dto.user.OAuthInfoResponse;
+import com.back.splitmeet.dto.user.token.AuthTokens;
+import com.back.splitmeet.repository.userInfoRepository;
+import com.back.splitmeet.service.user.token.AuthTokensGenerator;
 
 import lombok.RequiredArgsConstructor;
 

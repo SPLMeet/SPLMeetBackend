@@ -1,4 +1,4 @@
-package com.back.splitmeet.user.repository;
+package com.back.splitmeet.repository;
 
 import java.util.Optional;
 

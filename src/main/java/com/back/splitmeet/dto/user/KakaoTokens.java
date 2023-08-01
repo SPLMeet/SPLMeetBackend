@@ -1,4 +1,4 @@
-package com.back.splitmeet.dto;
+package com.back.splitmeet.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

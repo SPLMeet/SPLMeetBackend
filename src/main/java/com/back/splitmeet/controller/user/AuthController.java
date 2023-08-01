@@ -1,4 +1,4 @@
-package com.back.splitmeet.controller;
+package com.back.splitmeet.controller.user;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.splitmeet.dto.user.KakaoLoginParams;
+import com.back.splitmeet.dto.user.token.AuthTokens;
 import com.back.splitmeet.service.user.OAuthLoginService;
-import com.back.splitmeet.user.KakaoLoginParams;
-import com.back.splitmeet.user.token.AuthTokens;
 
 import lombok.RequiredArgsConstructor;
 

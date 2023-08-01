@@ -1,6 +1,6 @@
-package com.back.splitmeet.dto;
+package com.back.splitmeet.dto.user;
 
-import com.back.splitmeet.user.KakaoApiClient;
+import com.back.splitmeet.service.user.KakaoApiClient;
 
 public interface OAuthInfoResponse {
 	String getEmail();

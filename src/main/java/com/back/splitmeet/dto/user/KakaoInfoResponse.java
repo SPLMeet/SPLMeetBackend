@@ -1,6 +1,6 @@
-package com.back.splitmeet.user;
+package com.back.splitmeet.dto.user;
 
-import com.back.splitmeet.dto.OAuthInfoResponse;
+import com.back.splitmeet.service.user.KakaoApiClient;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

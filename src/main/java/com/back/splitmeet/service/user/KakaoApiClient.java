@@ -1,4 +1,4 @@
-package com.back.splitmeet.user;
+package com.back.splitmeet.service.user;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -9,8 +9,10 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
-import com.back.splitmeet.dto.KakaoTokens;
-import com.back.splitmeet.dto.OAuthInfoResponse;
+import com.back.splitmeet.dto.user.KakaoInfoResponse;
+import com.back.splitmeet.dto.user.KakaoTokens;
+import com.back.splitmeet.dto.user.OAuthInfoResponse;
+import com.back.splitmeet.dto.user.OAuthLoginParams;
 
 import lombok.RequiredArgsConstructor;
 

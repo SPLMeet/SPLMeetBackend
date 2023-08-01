@@ -7,10 +7,8 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import com.back.splitmeet.dto.OAuthInfoResponse;
-import com.back.splitmeet.user.KakaoApiClient;
-import com.back.splitmeet.user.OAuthApiClient;
-import com.back.splitmeet.user.OAuthLoginParams;
+import com.back.splitmeet.dto.user.OAuthInfoResponse;
+import com.back.splitmeet.dto.user.OAuthLoginParams;
 
 @Component
 public class RequestOAuthInfoService {
