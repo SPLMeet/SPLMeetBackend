@@ -1,4 +1,4 @@
-package com.back.splitmeet.domain;
+package com.back.splitmeet.domain.coBuy;
 
 import java.util.ArrayList;
 import java.util.List;

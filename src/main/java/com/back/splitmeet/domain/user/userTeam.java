@@ -1,4 +1,4 @@
-package com.back.splitmeet.domain;
+package com.back.splitmeet.domain.user;
 
 import java.time.LocalDate;
 
@@ -28,7 +28,7 @@ public class userTeam {
 	private LocalDate startDate;
 
 	private LocalDate endDate;
-	
+
 	private Long teamTotalCost;
 
 }

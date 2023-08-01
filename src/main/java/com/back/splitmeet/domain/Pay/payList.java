@@ -1,4 +1,6 @@
-package com.back.splitmeet.domain;
+package com.back.splitmeet.domain.Pay;
+
+import com.back.splitmeet.domain.user.userInfo;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

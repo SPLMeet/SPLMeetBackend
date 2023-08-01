@@ -1,4 +1,4 @@
-package com.back.splitmeet.domain;
+package com.back.splitmeet.domain.generalPost;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
