@@ -1,9 +1,9 @@
-package com.back.splitmeet.controller;
+package com.back.splitmeet.payment.controller;
 
-import com.back.splitmeet.dto.KakaoReadyResponse;
-import com.back.splitmeet.exception.BusinessLogicException;
-import com.back.splitmeet.service.KakaoPayService;
-import com.back.splitmeet.exception.ExceptionCode;
+import com.back.splitmeet.payment.dto.KakaoReadyResponse;
+import com.back.splitmeet.payment.exception.BusinessLogicException;
+import com.back.splitmeet.payment.service.KakaoPayService;
+import com.back.splitmeet.payment.exception.ExceptionCode;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

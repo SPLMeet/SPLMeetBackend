@@ -1,12 +1,12 @@
-package com.back.splitmeet.service;
+package com.back.splitmeet.payment.service;
 
+import com.back.splitmeet.payment.dto.KakaoReadyResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 
-import com.back.splitmeet.dto.KakaoReadyResponse;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;

@@ -1,4 +1,4 @@
-package com.back.splitmeet.exception;
+package com.back.splitmeet.payment.exception;
 
 import lombok.Getter;
 

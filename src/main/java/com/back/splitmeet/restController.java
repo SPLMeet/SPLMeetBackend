@@ -1,4 +1,4 @@
-package com.back.splitmeet.controller;
+package com.back.splitmeet;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

@@ -1,4 +1,4 @@
-package com.back.splitmeet.dto;
+package com.back.splitmeet.payment.dto;
 
 import lombok.Getter;
 import lombok.Setter;
