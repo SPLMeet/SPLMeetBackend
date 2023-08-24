@@ -21,6 +21,6 @@ public class payList {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
-	private userInfo userinfo;
+	private UserInfo userinfo;
 
 }

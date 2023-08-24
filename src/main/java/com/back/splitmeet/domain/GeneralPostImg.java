@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Table(name = "generalPostImg")
-public class generalPostImg {
+public class GeneralPostImg {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false)

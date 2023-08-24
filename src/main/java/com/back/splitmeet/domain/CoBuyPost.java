@@ -14,28 +14,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "generalPost")
+@Table(name = "coBuyPost")
 @Getter
 @Setter
-public class generalPost {
+public class CoBuyPost {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false)
 	private Long localId;
 
+	private Integer localMoney;
+
 	private String localName;
 
-	private String localMoneyDescription;
+	private String localDesription;
 
-	private String localWeb;
-
-	private String localTime;
-
-	private String localAddress;
-
-	private String localNum;
+	private String localPlace;
 
 	@OneToMany
 	@JoinColumn(name = "PostImg")
-	private List<generalPostImg> generalpostImgs = new ArrayList<>();
+	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>();
 }
