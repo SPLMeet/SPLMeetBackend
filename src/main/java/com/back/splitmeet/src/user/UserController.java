@@ -5,11 +5,12 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.splitmeet.domain.UserInfo;
+import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.src.auth.AuthService;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
 import com.back.splitmeet.src.user.dto.GetUserInfoRes;
@@ -20,7 +21,9 @@ import com.back.splitmeet.util.BaseResponseStatus;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
@@ -28,11 +31,13 @@ public class UserController {
 
 	private UserService userService;
 	private AuthService authService;
+	private UserInfoRepository userInfoRepository;
 
 	@Autowired
-	public UserController(UserService userService, AuthService authService) {
+	public UserController(UserService userService, AuthService authService, UserInfoRepository userInfoRepository) {
 		this.userService = userService;
 		this.authService = authService;
+		this.userInfoRepository = userInfoRepository;
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -56,13 +61,18 @@ public class UserController {
 			|| getMemberToIdtoken.getPicture() == null) {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_TOKEN);
 		}
-		return new BaseResponse<>(userService.KakaoService(getMemberToIdtoken, action));
+		KakaoLoginRes kakaoLoginRes = userService.KakaoService(getMemberToIdtoken, action);
+		if (kakaoLoginRes == null) {
+			return null;
+		} else {
+			return new BaseResponse<>(kakaoLoginRes);
+		}
 	}
 
 	@GetMapping("/{userid}")
-	public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable("userid") Integer userId,
-		@RequestHeader(value = "Authorization") String accessToken) {
-		GetUserInfoRes getUserInfoRes = new GetUserInfoRes();
+	public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable("userid") Integer userId) {
+		UserInfo user = userInfoRepository.findOneByUserId(userId);
+		GetUserInfoRes getUserInfoRes = new GetUserInfoRes(user.getUserProfile());
 		return new BaseResponse<>(getUserInfoRes);
 	}
 }

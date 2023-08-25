@@ -2,6 +2,8 @@ package com.back.splitmeet.src.user;
 
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.UserInfo;
+import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.src.auth.AuthService;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
@@ -19,20 +21,26 @@ import lombok.extern.slf4j.Slf4j;
 public class UserService {
 	private final AuthService authService;
 	private final JwtTokenProvider jwtTokenProvider;
+	private final UserInfoRepository userInfoRepository;
 
-	public UserService(AuthService authService, JwtTokenProvider jwtTokenProvider) {
+	public UserService(AuthService authService, JwtTokenProvider jwtTokenProvider,
+		UserInfoRepository userInfoRepository) {
 		this.authService = authService;
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.userInfoRepository = userInfoRepository;
 	}
 
 	public KakaoLoginRes KakaoService(GetMemberToIdtoken idToken, String action) {
-		//
-		//	DB 조회
-		//
-		// DB에 없으면 return false
-		//
-		//	DB 삽입(회원가입) 조건 action == create
-		//
+		UserInfo userInfo = userInfoRepository.findByUserEmailAndUserName(idToken.getEmail(), idToken.getNickname());
+
+		if ((userInfo.getUserEmail() == null || userInfo.getUserName() == null)) {
+			return null;
+		}
+		if (action.equals("create")) {
+			UserInfo userInfoCreate = UserInfo.createUser(idToken.getEmail(), idToken.getNickname(),
+				idToken.getPicture());
+			userInfoRepository.save(userInfoCreate);
+		}
 		KakaoLoginRes kakaoLoginRes = new KakaoLoginRes(
 			jwtTokenProvider.createAccessToken(idToken.getEmail(),
 				idToken.getNickname(), idToken.getPicture()),
