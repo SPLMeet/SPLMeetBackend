@@ -8,6 +8,5 @@ import lombok.Setter;
 @Getter
 @Setter
 public class GetUserInfoRes {
-	private String car;
-	private String phone;
+	private String userProfile;
 }
