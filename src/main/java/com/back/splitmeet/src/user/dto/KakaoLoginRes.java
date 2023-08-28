@@ -7,6 +7,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class GetUserInfoRes {
-	private String userProfile;
+public class KakaoLoginRes {
+	private String accessToken;
+	private String refreshToken;
 }

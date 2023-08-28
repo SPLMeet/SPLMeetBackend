@@ -52,4 +52,14 @@ public class UserInfo {
 	@JoinColumn(name = "payListId")
 	private List<payList> orders = new ArrayList<>();
 
+	@Builder
+	public UserInfo(String userEmail, String nickname, String userProfile) {
+		this.userEmail = userEmail;
+		this.userName = nickname;
+		this.userProfile = userProfile;
+	}
+
+	public static UserInfo createUser(String userEmail, String nickname, String userProfile) {
+		return new UserInfo(userEmail, nickname, userProfile);
+	}
 }
