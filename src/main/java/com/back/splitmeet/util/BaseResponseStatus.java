@@ -12,6 +12,7 @@ public enum BaseResponseStatus {
 	INVALID_AUTH(false, 2005, "유효하지 않은 회원 정보입니다."),
 	EMPTY_TOKEN(false, 2006, "토큰이 비어있습니다"),
 	USERS_EMPTY_USER_EMAIL(false, 2011, "유저 이메일 값을 확인해주세요."),
+	NOT_SIGNED(false, 2012, "미가입된 이메일 입니다"),
 	POST_USERS_EXISTS_EMAIL(false, 2017, "중복된 이메일입니다."),
 	DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
 	DELETE_USER_FAIL(false, 4008, "유저 정보 삭제에 실패하였습니다."),
