@@ -71,8 +71,8 @@ public class UserController {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_TOKEN);
 		}
 		KakaoLoginRes kakaoLoginRes = userService.KakaoService(getMemberToIdtoken, action);
-		if (kakaoLoginRes == null) {
-			return null;
+		if (kakaoLoginRes.getAccessToken() == null || kakaoLoginRes.getRefreshToken() == null) {
+			return new BaseResponse<>(BaseResponseStatus.NOT_SIGNED);
 		} else {
 			return new BaseResponse<>(kakaoLoginRes);
 		}
