@@ -1,5 +1,6 @@
 package com.back.splitmeet.src.user;
 
+import com.back.splitmeet.domain.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
