@@ -31,16 +31,18 @@ public class UserService {
 	}
 
 	public KakaoLoginRes KakaoService(GetMemberToIdtoken idToken, String action) {
-		UserInfo userInfo = userInfoRepository.findByUserEmailAndUserName(idToken.getEmail(), idToken.getNickname());
-
-		if ((userInfo.getUserEmail() == null || userInfo.getUserName() == null)) {
-			return null;
-		}
-		if (action.equals("create")) {
+		if (action.equals("signup")) {
 			UserInfo userInfoCreate = UserInfo.createUser(idToken.getEmail(), idToken.getNickname(),
 				idToken.getPicture());
 			userInfoRepository.save(userInfoCreate);
 		}
+
+		UserInfo userInfo = userInfoRepository.findByUserEmailAndUserName(idToken.getEmail(), idToken.getNickname());
+
+		if (userInfo == null) {
+			return new KakaoLoginRes(null, null);
+		}
+
 		KakaoLoginRes kakaoLoginRes = new KakaoLoginRes(
 			jwtTokenProvider.createAccessToken(idToken.getEmail(),
 				idToken.getNickname(), idToken.getPicture()),
