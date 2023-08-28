@@ -12,7 +12,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -63,5 +62,4 @@ public class UserInfo {
 	public static UserInfo createUser(String userEmail, String nickname, String userProfile) {
 		return new UserInfo(userEmail, nickname, userProfile);
 	}
-
 }
