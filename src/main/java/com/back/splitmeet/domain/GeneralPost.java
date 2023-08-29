@@ -10,13 +10,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "generalPost")
 @Getter
 @Setter
+@NoArgsConstructor
 public class GeneralPost {
 	@Id
 	@GeneratedValue
@@ -34,6 +37,18 @@ public class GeneralPost {
 	private String localAddress;
 
 	private String localNum;
+
+	@Builder
+	public GeneralPost(Long localId, String localName, String localMoneyDescription, String localWeb, String localTime,
+		String localAddress, String localNum) {
+		this.localId = localId;
+		this.localName = localName;
+		this.localMoneyDescription = localMoneyDescription;
+		this.localWeb = localWeb;
+		this.localTime = localTime;
+		this.localAddress = localAddress;
+		this.localNum = localNum;
+	}
 
 	@OneToMany
 	@JoinColumn(name = "PostImg")
