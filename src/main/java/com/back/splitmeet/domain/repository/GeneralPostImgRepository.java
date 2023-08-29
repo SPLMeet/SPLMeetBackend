@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.back.splitmeet.domain.GeneralPostImg;
 
 public interface GeneralPostImgRepository extends JpaRepository<GeneralPostImg, Long> {
-	GeneralPostImg findByLocalId(Long id);
+	GeneralPostImg findTopByLocalId(Long id);
 }

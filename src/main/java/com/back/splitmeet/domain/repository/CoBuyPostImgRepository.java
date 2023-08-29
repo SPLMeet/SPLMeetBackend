@@ -7,5 +7,5 @@ import com.back.splitmeet.domain.CoBuyPostImg;
 
 @Repository
 public interface CoBuyPostImgRepository extends JpaRepository<CoBuyPostImg, Long> {
-	CoBuyPostImg findByLocalId(Long localId);
+	CoBuyPostImg findTopByLocalId(Long localId);
 }
