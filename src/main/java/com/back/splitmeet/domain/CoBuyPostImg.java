@@ -17,6 +17,6 @@ public class CoBuyPostImg {
 	@GeneratedValue
 	@Column(nullable = false)
 	private Long postImgId;
-
+	private Long localId;
 	private String imgUrl;
 }
