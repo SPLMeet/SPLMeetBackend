@@ -28,16 +28,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
 public class UserController {
-	@Autowired
-	private UserService userService;
-
-	@PostMapping("/test")
-	public BaseResponse<PostUserTestRes> test(@RequestBody PostUserTestReq req) {
-		PostUserTestRes postUserTestRes = userService.test(req);
-		if (postUserTestRes.getUserIdx() == 1) {
-			return new BaseResponse<>(BaseResponseStatus.EMPTY_JWT);
-		}
-
 	private UserService userService;
 	private AuthService authService;
 	private UserInfoRepository userInfoRepository;
