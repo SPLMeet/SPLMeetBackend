@@ -38,7 +38,6 @@ public class ScheduleModifyService {
 		scheduleInfoRepository.save(schedule);
 
 		scheduleModifyRes.setSuccess(1);
-		System.out.println(scheduleModifyRes.getSuccess());
 		return scheduleModifyRes;
 	}
 

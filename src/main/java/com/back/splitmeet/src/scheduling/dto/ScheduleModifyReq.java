@@ -1,6 +1,5 @@
 package com.back.splitmeet.src.scheduling.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -14,20 +13,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class ScheduleModifyReq {
-	@JsonProperty(value = "teamId")
+
+	@JsonProperty(value = "team_id")
 	private Long teamId;
 
-	@JsonProperty(value = "date")
 	private String date;
 
-	@JsonProperty(value = "time")
 	private String time;
 
-	@JsonProperty(value = "place")
 	private String place;
 
-	@JsonProperty(value = "cost")
 	private Integer cost;
 }
