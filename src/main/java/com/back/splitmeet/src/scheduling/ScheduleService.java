@@ -18,7 +18,7 @@ public class ScheduleService {
 	private ScheduleInfoRepository scheduleInfoRepository;
 
 	public List<ScheduleCommunityRes> inquireSchedule(ScheduleCommunityReq req) {
-		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByDate(Long.parseLong("1"));
+		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByDate(req.getTeamId());
 		ArrayList<ScheduleCommunityRes> scheduleCommunityRes = new ArrayList<>();
 		System.out.println(schedule);
 
