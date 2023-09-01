@@ -1,6 +1,7 @@
 package com.back.splitmeet.src.scheduling;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,9 @@ public class ScheduleService {
 	private ScheduleInfoRepository scheduleInfoRepository;
 
 	public List<ScheduleCommunityRes> inquireSchedule(ScheduleCommunityReq req) {
-		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByDate(req.getTeamId());
-		List<ScheduleCommunityRes> scheduleCommunityRes = null;
+		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByDate(Long.parseLong("1"));
+		ArrayList<ScheduleCommunityRes> scheduleCommunityRes = new ArrayList<>();
+		System.out.println(schedule);
 
 		for (Schedule schedule_temp : schedule) {
 			scheduleCommunityRes.add(new ScheduleCommunityRes(
