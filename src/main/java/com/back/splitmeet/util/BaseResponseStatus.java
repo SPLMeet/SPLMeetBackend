@@ -9,14 +9,20 @@ public enum BaseResponseStatus {
 	INVALID_JWT(false, 2002, "유효하지 않은 JWT입니다."),
 	INVALID_TOKEN(false, 2003, "유효하지 않은 토큰 입니다."),
 	INVALID_USER_JWT(false, 2004, "권한이 없는 유저의 접근입니다."),
-	INVALID_AUTH(false, 2005, "유효하지 않은 회원 정보입니다."),
 	EMPTY_TOKEN(false, 2006, "토큰이 비어있습니다"),
-	USERS_EMPTY_USER_EMAIL(false, 2011, "유저 이메일 값을 확인해주세요."),
-	NOT_SIGNED(false, 2012, "미가입된 이메일 입니다"),
-	POST_USERS_EXISTS_EMAIL(false, 2017, "중복된 이메일입니다."),
+	// 2050 번대 -> payment status
+	PAYMENT_FAIL(false, 2050, "결제에 실패하였습니다."),
+	PAYMENT_CANCEL(false, 2051, "결제가 취소되었습니다."),
+	// 2060번대 -> user status
+	USERS_EMPTY_USER_EMAIL(false, 2061, "유저 이메일 값을 확인해주세요."),
+	NOT_SIGNED(false, 2062, "미가입된 이메일 입니다"),
+	POST_USERS_EXISTS_EMAIL(false, 2063, "중복된 이메일입니다."),
+	INVALID_AUTH(false, 2064, "유효하지 않은 회원 정보입니다."),
+	//
 	DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
 	DELETE_USER_FAIL(false, 4008, "유저 정보 삭제에 실패하였습니다."),
-	SURVEY_DAY(false, 5031, "설문은 하루에 한 번만 가능 합니다.");
+	SURVEY_DAY(false, 5031, "설문은 하루에 한 번만 가능 합니다."),
+	NOT_CONFIGURED_ERROR(false, 6001, "미지정 에러");
 
 	private final boolean isSuccess;
 	private final int code;
