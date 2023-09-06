@@ -23,8 +23,8 @@ public class TeamService {
 	@Transactional
 	public PostCreateTeamRes createRoom(String token) {
 
-		//TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(yourToken);
-		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId(token));
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(token);
+		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 		if (userinfo == null) {
 			return null;
 		}
