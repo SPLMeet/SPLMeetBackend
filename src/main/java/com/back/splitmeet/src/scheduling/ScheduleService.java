@@ -20,7 +20,6 @@ public class ScheduleService {
 	public List<ScheduleCommunityRes> inquireSchedule(ScheduleCommunityReq req) {
 		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByDate(req.getTeamId());
 		ArrayList<ScheduleCommunityRes> scheduleCommunityRes = new ArrayList<>();
-		System.out.println(schedule);
 
 		for (Schedule schedule_temp : schedule) {
 			scheduleCommunityRes.add(new ScheduleCommunityRes(

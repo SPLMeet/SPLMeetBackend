@@ -1,5 +1,7 @@
 package com.back.splitmeet.src.scheduling.dto;
 
+import java.time.ZonedDateTime;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
@@ -18,11 +20,11 @@ public class ScheduleModifyReq {
 	@JsonProperty(value = "team_id")
 	private Long teamId;
 
-	private String date;
-
-	private String time;
+	private ZonedDateTime date;
 
 	private String place;
 
 	private Integer cost;
+
+	private Boolean modifyOption;  //True면 수정 False면 추가
 }

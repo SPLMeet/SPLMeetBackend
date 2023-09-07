@@ -1,8 +1,5 @@
 package com.back.splitmeet.src.scheduling;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,23 +13,12 @@ public class ScheduleModifyService {
 	@Autowired
 	private ScheduleInfoRepository scheduleInfoRepository;
 
-	private Schedule schedule = new Schedule();
-
 	public ScheduleModifyRes modifySchedule(ScheduleModifyReq req) {
+		Schedule schedule = new Schedule();
 		ScheduleModifyRes scheduleModifyRes = new ScheduleModifyRes();
-		ZonedDateTime dateAndTime = ZonedDateTime.of(
-			Integer.parseInt(req.getDate().substring(0, 4)),
-			Integer.parseInt(req.getDate().substring(4, 5)),
-			Integer.parseInt(req.getDate().substring(5, 7)),
-			Integer.parseInt(req.getDate().substring(0, 2)),
-			Integer.parseInt(req.getDate().substring(2, 4)),
-			0,
-			0,
-			ZoneId.of("Asia/Seoul")
-		);
 
 		schedule.setTeamId(req.getTeamId());
-		schedule.setDate(dateAndTime);
+		schedule.setDate(req.getDate());
 		schedule.setPlace(req.getPlace());
 		schedule.setCost(req.getCost());
 		scheduleInfoRepository.save(schedule);
@@ -40,5 +26,4 @@ public class ScheduleModifyService {
 		scheduleModifyRes.setSuccess(1);
 		return scheduleModifyRes;
 	}
-
 }
