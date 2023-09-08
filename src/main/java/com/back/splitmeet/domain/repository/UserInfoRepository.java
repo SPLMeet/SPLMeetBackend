@@ -7,8 +7,11 @@ import com.back.splitmeet.domain.UserInfo;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
+	UserInfo findOneByUserId(Long userId);
 
-	UserInfo findByUserEmailAndUserName(String email, String name);
+	UserInfo findOneByUserEmailAndUserName(String email, String nickname);
 
-	UserInfo findOneByUserId(Integer userId);
+	boolean existsByRefreshToken(String refreshToken);
+
+	UserInfo findByUserEmail(String userEmail);
 }
