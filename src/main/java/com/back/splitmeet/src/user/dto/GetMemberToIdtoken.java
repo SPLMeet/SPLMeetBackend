@@ -13,5 +13,4 @@ public class GetMemberToIdtoken {
 	private String nickname;
 	private String email;
 	private String picture;
-
 }
