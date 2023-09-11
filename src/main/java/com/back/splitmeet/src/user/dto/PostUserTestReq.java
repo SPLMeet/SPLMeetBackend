@@ -4,5 +4,6 @@ import lombok.Data;
 
 @Data
 public class PostUserTestReq {
+	private String email;
 	private String userName;
 }

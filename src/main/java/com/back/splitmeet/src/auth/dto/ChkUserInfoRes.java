@@ -8,11 +8,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ChkUserInfoRes {
-	private String userName;
-	private String userEmail;
-	private Integer role;
-	private boolean isAuth;
-	private Integer teamId;
-	private Integer userId;
-
+	private Long userId;
+	private String email;
+	private String name;
+	private String picture;
 }
