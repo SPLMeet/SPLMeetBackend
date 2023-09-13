@@ -13,6 +13,7 @@ public class SpringSecurityConfig {
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
+			.requestMatchers("/api/user").permitAll()
 			.and()
 			.httpBasic();
 
