@@ -2,9 +2,11 @@ package com.back.splitmeet.src.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,22 +58,39 @@ public class UserController {
 		String decodedInfo = authService.decryptBase64UrlToken(idToken.getIdToken().split("\\.")[1]);
 		GetMemberToIdtoken getMemberToIdtoken = userService.tranJsonToGetMemberTo(decodedInfo);
 
-		if (getMemberToIdtoken.getEmail() == null || getMemberToIdtoken.getNickname() == null
-			|| getMemberToIdtoken.getPicture() == null) {
+		if (getMemberToIdtoken == null) {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_TOKEN);
 		}
-		KakaoLoginRes kakaoLoginRes = userService.KakaoService(getMemberToIdtoken, action);
-		if (kakaoLoginRes == null) {
-			return null;
+		KakaoLoginRes kakaoLoginRes = userService.kakaoLogin(getMemberToIdtoken, action);
+		if ((kakaoLoginRes.getAccessToken() == null || kakaoLoginRes.getRefreshToken() == null) && action.equals(
+			"signin")) {
+			return new BaseResponse<>(BaseResponseStatus.NOT_SIGNED);
+		} else if ((kakaoLoginRes.getAccessToken() == null || kakaoLoginRes.getRefreshToken() == null) && action.equals(
+			"signup")) {
+			return new BaseResponse<>(BaseResponseStatus.POST_USERS_EXISTS_EMAIL);
 		} else {
 			return new BaseResponse<>(kakaoLoginRes);
 		}
 	}
 
 	@GetMapping("/{userid}")
-	public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable("userid") Integer userId) {
+	public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable("userid") Long userId) {
 		UserInfo user = userInfoRepository.findOneByUserId(userId);
+		if (user == null) {
+			return new BaseResponse<>(BaseResponseStatus.INVALID_AUTH);
+		}
 		GetUserInfoRes getUserInfoRes = new GetUserInfoRes(user.getUserProfile());
 		return new BaseResponse<>(getUserInfoRes);
+	}
+
+	@GetMapping("/logout")
+	public BaseResponse<String> userLogout(@RequestHeader(value = "Authorization") String accessToken) {
+		return new BaseResponse<>(userService.userLogout(accessToken));
+	}
+
+	@DeleteMapping("/{userid}")
+	public BaseResponse<GetUserInfoRes> userDelete(@PathVariable("userid") Long userId,
+		@RequestHeader("Authorization") String accessToken) {
+		return new BaseResponse<>(userService.userDelete(userId, accessToken));
 	}
 }
