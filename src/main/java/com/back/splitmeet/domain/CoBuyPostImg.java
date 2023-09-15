@@ -3,6 +3,7 @@ package com.back.splitmeet.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -17,7 +18,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CoBuyPostImg {
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
 	private Long postImgId;
 	private Long localId;
