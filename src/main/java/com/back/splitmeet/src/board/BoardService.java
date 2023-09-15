@@ -15,7 +15,7 @@ import com.back.splitmeet.domain.repository.CoBuyPostRepository;
 import com.back.splitmeet.domain.repository.GeneralPostImgRepository;
 import com.back.splitmeet.domain.repository.GeneralPostRepository;
 import com.back.splitmeet.src.board.dto.GetBoardRes;
-import com.back.splitmeet.src.board.dto.GetBoardTemplete;
+import com.back.splitmeet.src.board.dto.GetBoardsRes;
 import com.back.splitmeet.src.board.dto.PostCreateReq;
 import com.back.splitmeet.src.board.dto.PostCreateRes;
 
@@ -30,52 +30,52 @@ public class BoardService {
 	@Autowired
 	private CoBuyPostImgRepository coBuyPostImgRepository;
 
-	public GetBoardRes boardList() {
-		List<GetBoardTemplete> localList = generalPostRepository.findAll().stream().map(generalPost -> {
+	public GetBoardsRes boardList() {
+		List<GetBoardRes> localList = generalPostRepository.findAll().stream().map(generalPost -> {
 			GeneralPostImg generalPostImg = generalPostImgRepository.findTopByLocalId(generalPost.getLocalId());
 			String url;
 			if (generalPostImg == null)
 				url = null;
 			else
 				url = generalPostImg.getImgUrl();
-			return GetBoardTemplete.builder()
+			return GetBoardRes.builder()
 				.localId(generalPost.getLocalId())
-				.localPhoto(url)
-				.localPlace(generalPost.getLocalAddress())
+				.localPhoto(Collections.singletonList(url))
+				.localAddress(generalPost.getLocalAddress())
 				.localName(generalPost.getLocalName())
 				.build();
 		}).toList();
 		// TODO: 추후 시간 기준으로 변경
-		List<GetBoardTemplete> timeList = coBuyPostRepository.findAll().stream().map(generalPost -> {
-			CoBuyPostImg coBuyPostImg = coBuyPostImgRepository.findTopByLocalId(generalPost.getLocalId());
+		List<GetBoardRes> timeList = coBuyPostRepository.findAll().stream().map(generalPost -> {
+			CoBuyPostImg coBuyPostImg = coBuyPostImgRepository.findTopByLocalId(generalPost.getIdx());
 			String url;
 			if (coBuyPostImg == null)
 				url = null;
 			else
 				url = coBuyPostImg.getImgUrl();
-			return GetBoardTemplete.builder()
-				.localId(generalPost.getLocalId())
-				.localPhoto(url)
-				.localPlace(generalPost.getLocalAddress())
+			return GetBoardRes.builder()
+				.localId(generalPost.getIdx())
+				.localPhoto(Collections.singletonList(url))
+				.localAddress(generalPost.getLocalAddress())
 				.localName(generalPost.getLocalName())
 				.build();
 		}).toList();
 		// TODO: 추후 자리 기준으로 변경
-		List<GetBoardTemplete> seatList = coBuyPostRepository.findAll().stream().map(generalPost -> {
-			CoBuyPostImg coBuyPostImg = coBuyPostImgRepository.findTopByLocalId(generalPost.getLocalId());
+		List<GetBoardRes> seatList = coBuyPostRepository.findAll().stream().map(generalPost -> {
+			CoBuyPostImg coBuyPostImg = coBuyPostImgRepository.findTopByLocalId(generalPost.getIdx());
 			String url;
 			if (coBuyPostImg == null)
 				url = null;
 			else
 				url = coBuyPostImg.getImgUrl();
-			return GetBoardTemplete.builder()
-				.localId(generalPost.getLocalId())
-				.localPhoto(url)
-				.localPlace(generalPost.getLocalAddress())
+			return GetBoardRes.builder()
+				.localId(generalPost.getIdx())
+				.localPhoto(Collections.singletonList(url))
+				.localAddress(generalPost.getLocalAddress())
 				.localName(generalPost.getLocalName())
 				.build();
 		}).toList();
-		return new GetBoardRes(localList, timeList, seatList);
+		return new GetBoardsRes(localList, timeList, seatList);
 	}
 
 	public PostCreateRes createBoard(PostCreateReq req) {
@@ -89,7 +89,7 @@ public class BoardService {
 				.localName(req.getLocalName())
 				.localAddress(req.getLocalAddress())
 				.build();
-			idx = coBuyPostRepository.save(coBuyPost).getLocalId();
+			idx = coBuyPostRepository.save(coBuyPost).getIdx();
 			List<CoBuyPostImg> coBuyPostImgs = req.getLocalPhoto()
 				.stream()
 				.map(photo -> CoBuyPostImg.builder()
@@ -119,5 +119,24 @@ public class BoardService {
 		} else
 			idx = null;
 		return new PostCreateRes(idx);
+	}
+
+	public GetBoardRes boardDetail(Long id) {
+		CoBuyPost coBuyPost = coBuyPostRepository.findById(id).orElse(null);
+		List<CoBuyPostImg> coBuyPostImgs = coBuyPostImgRepository.findAllByLocalId(id);
+
+		if (coBuyPost == null)
+			return null;
+		return GetBoardRes.builder()
+			.localId(coBuyPost.getIdx())
+			.localMoney(coBuyPost.getLocalMoney())
+			.localName(coBuyPost.getLocalName())
+			.localDescription(coBuyPost.getLocalDesription())
+			.localAddress(coBuyPost.getLocalAddress())
+			.targetNumber(coBuyPost.getTargetNumber())
+			.status(coBuyPost.getStatus())
+			.timeLimit(coBuyPost.getTimeLimit())
+			.localPhoto(coBuyPostImgs.stream().map(CoBuyPostImg::getImgUrl).toList())
+			.build();
 	}
 }
