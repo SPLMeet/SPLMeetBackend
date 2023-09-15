@@ -1,5 +1,6 @@
 package com.back.splitmeet.domain;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,21 +27,33 @@ public class CoBuyPost {
 	@Column(nullable = false)
 	private Long localId;
 
-	private Integer localMoney;
+	private Long localMoney;
 
+	@Column(length = 50, nullable = false)
 	private String localName;
 
+	@Column(columnDefinition = "TEXT", nullable = false)
 	private String localDesription;
 
-	private String localPlace;
+	@Column(length = 100, nullable = false)
+	private String localAddress;
+
+	@Column(nullable = false)
+	private Long targetNumber;
+
+	@Column(nullable = false)
+	private Long status;
+
+	@Column(nullable = false)
+	private LocalDateTime timeLimit;
 
 	@Builder
-	public CoBuyPost(Long localId, Integer localMoney, String localName, String localDesription, String localPlace) {
+	public CoBuyPost(Long localId, Long localMoney, String localName, String localDesription, String localAddress) {
 		this.localId = localId;
 		this.localMoney = localMoney;
 		this.localName = localName;
 		this.localDesription = localDesription;
-		this.localPlace = localPlace;
+		this.localAddress = localAddress;
 	}
 
 	@OneToMany
