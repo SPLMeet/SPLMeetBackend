@@ -23,6 +23,6 @@ public class PostCreateReq {
 	private String localMoneyDescription;
 	private String localAddress;
 	//cobuy
-	private Integer localMoney;
+	private Long localMoney;
 	private String localDescription;
 }

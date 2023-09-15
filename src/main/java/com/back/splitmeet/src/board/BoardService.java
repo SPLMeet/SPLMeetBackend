@@ -56,7 +56,7 @@ public class BoardService {
 			return GetBoardTemplete.builder()
 				.localId(generalPost.getLocalId())
 				.localPhoto(url)
-				.localPlace(generalPost.getLocalPlace())
+				.localPlace(generalPost.getLocalAddress())
 				.localName(generalPost.getLocalName())
 				.build();
 		}).toList();
@@ -71,13 +71,10 @@ public class BoardService {
 			return GetBoardTemplete.builder()
 				.localId(generalPost.getLocalId())
 				.localPhoto(url)
-				.localPlace(generalPost.getLocalPlace())
+				.localPlace(generalPost.getLocalAddress())
 				.localName(generalPost.getLocalName())
 				.build();
 		}).toList();
-		System.out.println("localList = " + localList);
-		System.out.println("timeList = " + timeList);
-		System.out.println("seatList = " + seatList);
 		return new GetBoardRes(localList, timeList, seatList);
 	}
 
@@ -90,7 +87,7 @@ public class BoardService {
 				.localDesription(req.getLocalDescription())
 				.localMoney(req.getLocalMoney())
 				.localName(req.getLocalName())
-				.localPlace(req.getLocalPlace())
+				.localAddress(req.getLocalAddress())
 				.build();
 			idx = coBuyPostRepository.save(coBuyPost).getLocalId();
 			List<CoBuyPostImg> coBuyPostImgs = req.getLocalPhoto()
