@@ -6,6 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -43,9 +45,11 @@ public class UserInfo {
 
 	private String userEmail;
 
-	private Integer role;
+	@Enumerated(EnumType.STRING)
+	private RoleStatus role;
 
-	private Integer submitMoney;
+	@Enumerated(EnumType.STRING)
+	private SubmitMoneyStatus submitMoney;
 
 	@Column(columnDefinition = "TEXT")
 	private String accessToken;
@@ -77,4 +81,14 @@ public class UserInfo {
 	public static UserInfo createUser(String userEmail, String nickname, String userProfile) {
 		return new UserInfo(userEmail, nickname, userProfile);
 	}
+
+	//==생성 매서드 == //
+	public static UserInfo createTeamLeader(Long teamId) {
+		UserInfo userInfo = new UserInfo();
+		userInfo.setTeamId(teamId);
+		userInfo.setRole(RoleStatus.LEADER);
+
+		return userInfo;
+	}
+
 }
