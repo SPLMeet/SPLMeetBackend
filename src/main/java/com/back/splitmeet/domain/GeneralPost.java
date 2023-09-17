@@ -21,19 +21,25 @@ public class GeneralPost {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false)
-	private Long localId;
+	private Long localId; // 게시물 Id
 
-	private String localName;
+	@Column(nullable = false, length = 50)
+	private String localName; // 게시물 이름
 
-	private String localMoneyDescription;
+	@Column(nullable = false, length = 100)
+	private String localMoneyDescription; // 금액 설명
 
-	private String localWeb;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String localWeb; // 게시물 웹사이트
 
-	private String localTime;
+	@Column(nullable = false, length = 100)
+	private String localTime; //게시물 영업 시간
 
-	private String localAddress;
+	@Column(nullable = false, length = 80)
+	private String localAddress; // 게시물 주소
 
-	private String localNum;
+	@Column(nullable = false, length = 50)
+	private String localPhone; // 게시물 전화번호
 
 	@OneToMany
 	@JoinColumn(name = "PostImg")

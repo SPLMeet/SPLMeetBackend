@@ -21,21 +21,27 @@ public class UserTeam {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
-	private Long teamId;
+	private Long teamId; // 팀 아이디
 
-	private String teamName;
+	@Column(nullable = false, length = 320) // , name = "userteam_name" 옵션을 줄 수 있음
+	private String teamName; // 팀 이름
 
-	private Long teamLeader;
+	@Column(nullable = false)
+	private Long teamLeader; // 팀장 아이디 (userId)
 
-	private Boolean teamSettleStatus;
+	@Column(nullable = false, columnDefinition = "boolean default false")
+	private Boolean teamSettleStatus; // 팀 정산 여부
 
-	private LocalDate startDate;
+	@Column(nullable = false)
+	private LocalDate startDate; // 팀 시작 날짜
 
-	private LocalDate endDate;
+	@Column(nullable = false)
+	private LocalDate endDate; // 팀 종료 날짜
 
-	private Long teamTotalCost;
+	private Long teamTotalCost; // 팀 총 비용
 
-	private String leaderKakaoHash;
+	@Column(length = 20)
+	private String leaderKakaoHash; // 팀장 카카오 해시태그
 
 	@Builder
 	public UserTeam(Long teamLeader, String teamName, String leaderKakaoHash) {

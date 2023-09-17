@@ -29,41 +29,50 @@ public class UserInfo {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false)
-	private Long userId;
+	private Long userId; // 유저 Id
 
-	private Long teamId;
+	@Column(nullable = false)
+	private Long teamId; // 팀 Id (없는 경우 : 0)
 
-	private LocalDateTime createAt;
+	@Column(nullable = false)
+	private LocalDateTime createAt; // 유저 생성 시간
 
-	private LocalDateTime updateAt;
+	private LocalDateTime updateAt; // 유저 업데이트 시간
 
-	private UserStatus status;
-
-	private String userName;
-
-	private String userProfile;
-
-	private String userEmail;
-
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'NONE'")
 	@Enumerated(EnumType.STRING)
-	private RoleStatus role;
+	private UserStatus status; // 유저 상태
 
+	@Column(nullable = false, length = 45)
+	private String userName; // 유저 이름
+
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String userProfile; // 유저 프로필 사진
+
+	@Column(nullable = false, length = 45)
+	private String userEmail; // 유저 이메일
+
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'NONE'")
 	@Enumerated(EnumType.STRING)
-	private SubmitMoneyStatus submitMoney;
+	private RoleStatus role; // 유저 권한
+
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'DONE'")
+	@Enumerated(EnumType.STRING)
+	private SubmitMoneyStatus submitMoney; // 유저 정산 여부
 
 	@Column(columnDefinition = "TEXT")
-	private String accessToken;
+	private String accessToken; // 유저 토큰
 
 	@Column(columnDefinition = "TEXT")
-	private String refreshToken;
+	private String refreshToken; // 유저 토큰
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team")
-	private UserTeam userteam;
+	private UserTeam userteam; // 유저 팀
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payListId")
-	private List<payList> orders = new ArrayList<>();
+	private List<payList> orders = new ArrayList<>(); // 유저 결제 내역
 
 	@Builder(builderMethodName = "userBuilder", buildMethodName = "userBuild")
 	public UserInfo(String userEmail, String nickname, String userProfile) {
@@ -82,7 +91,7 @@ public class UserInfo {
 		return new UserInfo(userEmail, nickname, userProfile);
 	}
 
-	//==생성 매서드 == //
+	//==리더 생성 매서드 == //
 	public static UserInfo createTeamLeader(Long teamId) {
 		UserInfo userInfo = new UserInfo();
 		userInfo.setTeamId(teamId);

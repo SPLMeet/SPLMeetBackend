@@ -16,7 +16,8 @@ public class CoBuyPostImg {
 	@Id
 	@GeneratedValue
 	@Column(nullable = false)
-	private Long postImgId;
+	private Long postImgId; // 게시물 이미지 Id
 
-	private String imgUrl;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String imgUrl; // 게시물 이미지
 }

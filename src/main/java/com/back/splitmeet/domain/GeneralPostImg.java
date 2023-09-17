@@ -18,6 +18,7 @@ public class GeneralPostImg {
 	@Column(nullable = false)
 	private Long postImgId;
 
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String imgUrl;
 
 }
