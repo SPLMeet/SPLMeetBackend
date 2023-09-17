@@ -1,14 +1,14 @@
 package com.back.splitmeet.src.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
-import com.back.splitmeet.src.auth.AuthService;
+import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
 import com.back.splitmeet.src.user.dto.KakaoLoginRes;
-import com.back.splitmeet.util.BaseException;
 import com.back.splitmeet.util.BaseResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -19,39 +19,98 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class UserService {
-	private final AuthService authService;
-	private final JwtTokenProvider jwtTokenProvider;
+	private JwtTokenProvider jwtTokenProvider;
 	private final UserInfoRepository userInfoRepository;
 
-	public UserService(AuthService authService, JwtTokenProvider jwtTokenProvider,
+	@Autowired
+	public UserService(JwtTokenProvider jwtTokenProvider,
 		UserInfoRepository userInfoRepository) {
-		this.authService = authService;
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.userInfoRepository = userInfoRepository;
 	}
 
-	public KakaoLoginRes KakaoService(GetMemberToIdtoken idToken, String action) {
-		UserInfo userInfo = userInfoRepository.findByUserEmailAndUserName(idToken.getEmail(), idToken.getNickname());
+	public KakaoLoginRes kakaoLogin(GetMemberToIdtoken idToken, String action) {
+		KakaoLoginRes kakaoLoginRes = new KakaoLoginRes(null, null);
 
-		if ((userInfo.getUserEmail() == null || userInfo.getUserName() == null)) {
-			return null;
-		}
-		if (action.equals("create")) {
+		UserInfo userInfo = userInfoRepository.findOneByUserEmailAndUserName(idToken.getEmail(), idToken.getNickname());
+
+		if (action.equals("signup") && userInfo == null) {
+			log.info("1");
 			UserInfo userInfoCreate = UserInfo.createUser(idToken.getEmail(), idToken.getNickname(),
 				idToken.getPicture());
+
 			userInfoRepository.save(userInfoCreate);
+
+			userInfo = userInfoRepository.findOneByUserEmailAndUserName(idToken.getEmail(),
+				idToken.getNickname());
+			userInfo.setRole(0);
+
+			setUserToken(idToken, kakaoLoginRes, userInfo);
+		} else if (action.equals("signin") && userInfo != null) {
+			log.info("3");
+			setUserToken(idToken, kakaoLoginRes, userInfo);
+		} else if (action.equals("signup")) {
+			log.info("2");
+			kakaoLoginRes.setAccessToken(null);
+			kakaoLoginRes.setRefreshToken(null);
+		} else if (action.equals("signin")) {
+			log.info("4");
+			kakaoLoginRes.setAccessToken(null);
+			kakaoLoginRes.setRefreshToken(null);
 		}
-		KakaoLoginRes kakaoLoginRes = new KakaoLoginRes(
-			jwtTokenProvider.createAccessToken(idToken.getEmail(),
-				idToken.getNickname(), idToken.getPicture()),
-			jwtTokenProvider.createRefreshToken(idToken.getEmail()));
-		//
-		//	DB 추가
-		//
 		return kakaoLoginRes;
 	}
 
-	public GetMemberToIdtoken tranJsonToGetMemberTo(String json) throws BaseException {
+	public BaseResponseStatus userLogout(String accessToken) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (userinfo == null) {
+			return BaseResponseStatus.INVALID_JWT;
+		}
+
+		userinfo.setAccessToken(null);
+		userinfo.setRefreshToken(null);
+
+		userInfoRepository.save(userinfo);
+
+		return BaseResponseStatus.SUCCESS;
+	}
+
+	public BaseResponseStatus userDelete(Long userId, String accessToken) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (tokenInfo.getUserId() != userId) {
+			return BaseResponseStatus.INVALID_AUTH;
+		} else if (userinfo == null) {
+			return BaseResponseStatus.INVALID_AUTH;
+		}
+
+		userInfoRepository.delete(userinfo);
+
+		return BaseResponseStatus.SUCCESS;
+	}
+
+	private void setUserToken(GetMemberToIdtoken idToken, KakaoLoginRes kakaoLoginRes, UserInfo userInfo) {
+		String accessToken = jwtTokenProvider.createAccessToken(userInfo.getUserId(), userInfo.getTeamId(),
+			userInfo.getRole(),
+			idToken.getEmail(),
+			idToken.getNickname(), idToken.getPicture());
+
+		String refreshToken = jwtTokenProvider.createRefreshToken(userInfo.getUserId(), idToken.getEmail(),
+			idToken.getNickname());
+
+		userInfo.setAccessToken(accessToken);
+		userInfo.setRefreshToken(refreshToken);
+
+		userInfoRepository.save(userInfo);
+
+		kakaoLoginRes.setAccessToken(accessToken);
+		kakaoLoginRes.setRefreshToken(refreshToken);
+	}
+
+	public GetMemberToIdtoken tranJsonToGetMemberTo(String json) {
 		try {
 			ObjectMapper mapper = new
 				ObjectMapper().configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -60,7 +119,7 @@ public class UserService {
 
 			return dto;
 		} catch (JsonProcessingException e) {
-			throw new BaseException(BaseResponseStatus.INVALID_TOKEN);
+			return null;
 		}
 	}
 }

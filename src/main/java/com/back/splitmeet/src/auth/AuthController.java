@@ -24,7 +24,6 @@ public class AuthController {
 
 	@GetMapping
 	public BaseResponse<ChkUserInfoRes> doAuth(@RequestHeader(value = "Authorization") String accessToken) {
-
 		return new BaseResponse<>(authService.getUserInfo(accessToken));
 	}
 }
