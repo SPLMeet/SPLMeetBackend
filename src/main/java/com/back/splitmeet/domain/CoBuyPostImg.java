@@ -20,10 +20,11 @@ public class CoBuyPostImg {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
-	private Long postImgId;
+	private Long postImgId; // 게시물 이미지 Id
 	private Long localId;
-	private String imgUrl;
-
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String imgUrl; // 게시물 이미지
+  
 	@Builder
 	public CoBuyPostImg(Long localId, String imgUrl) {
 		this.localId = localId;

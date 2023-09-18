@@ -1,6 +1,7 @@
 package com.back.splitmeet.domain;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -25,29 +26,29 @@ public class CoBuyPost {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
-	private Long idx;
+	private Long idx; // 게시물 Id
 
-	private Long localMoney;
+	private Integer localMoney; // 게시물 금액
 
-	@Column(length = 50, nullable = false)
-	private String localName;
+	@Column(nullable = false, length = 50)
+	private String localName; // 게시물 이름
 
-	@Column(columnDefinition = "TEXT", nullable = false)
-	private String localDesription;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String localDesription; // 게시물 설명
 
-	@Column(length = 100, nullable = false)
-	private String localAddress;
-
-	@Column(nullable = false)
-	private Long targetNumber;
+	@Column(nullable = false, length = 100)
+	private String localAddress; // 게시물 주소
 
 	@Column(nullable = false)
-	private Long status;
+	private Long targetNumber; // 목표 인원
 
 	@Column(nullable = false)
-	private LocalDateTime timeLimit;
+	private Long status; // 0 : 공구 중, 1 : 공구 완료, 2 : 공구 실패
 
-	@Builder
+	@Column(nullable = false)
+	private LocalDateTime timeLimit; // 게시물 시간 제한
+  
+  @Builder
 	public CoBuyPost(Long idx, Long localMoney, String localName, String localDesription, String localAddress) {
 		this.idx = idx;
 		this.localMoney = localMoney;
@@ -58,5 +59,5 @@ public class CoBuyPost {
 
 	@OneToMany
 	@JoinColumn(name = "localId")
-	private List<CoBuyPostImg> coBuyPostImg;
+	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>(); // 게시물 이미지
 }
