@@ -10,4 +10,3 @@ import lombok.Setter;
 public class PostCreateTeamRes {
     private Long team_idx;
 }
-

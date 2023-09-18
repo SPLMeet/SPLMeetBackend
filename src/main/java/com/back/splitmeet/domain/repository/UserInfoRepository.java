@@ -14,4 +14,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	boolean existsByRefreshToken(String refreshToken);
 
 	UserInfo findByUserEmail(String userEmail);
+
+	UserInfo findOneByUserEmail(String userEmail);
 }
