@@ -8,6 +8,7 @@ import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.domain.repository.UserTeamRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
+import com.back.splitmeet.src.team.dto.PostCreateTeamRes;
 import com.back.splitmeet.src.team.dto.TeamBanRes;
 import com.back.splitmeet.util.BaseResponseStatus;
 
@@ -27,7 +28,31 @@ public class TeamService {
 		this.userTeamRepository = userTeamRepository;
 	}
 
-	public TeamBanRes TeamBan(String accessToken, Long userId) {
+	public PostCreateTeamRes createTeam(String accessToken, String teamName) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (userinfo == null) {
+			return null;
+		}
+		if (userinfo.getTeamId() != 0) {
+			return new PostCreateTeamRes(0L);
+		}
+		// if (!(userinfo.getRole().equals(RoleStatus.LEADER))) {
+		// 	return new PostCreateTeamRes(-1L);
+		// }
+		// UserTeam userTeam = userTeamRepository.save(UserTeam.builder()
+		// 	.teamLeader(userinfo.getUserId())
+		// 	.teamName(postCreateTeamReq.getTeam_name())
+		// 	.leaderKakaoHash(postCreateTeamReq.getLeader_kakao_hash())
+		// 	.build());
+		//userinfo = UserInfo.createTeamLeader(userTeam.getTeamId());
+
+		userInfoRepository.save(userinfo);
+		return new PostCreateTeamRes(userinfo.getUserId());
+	}
+
+	public TeamBanRes banUser(String accessToken, Long userId) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 
 		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
@@ -37,11 +62,6 @@ public class TeamService {
 			TeamBanRes teamBanRes = new TeamBanRes(null);
 			return teamBanRes;
 		} else {
-			//	private String userName;
-			//	private String userEmail;
-			//	private Integer role;
-			//	private Long teamId;
-			//	private Long userId;
 			banUser.setRole(0);
 			banUser.setTeamId(0L);
 			userInfoRepository.save(banUser);
@@ -50,7 +70,7 @@ public class TeamService {
 		}
 	}
 
-	public Boolean TeamOut(String accessToken) {
+	public Boolean outTeam(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 		if (userInfo.getRole() != 1) {
@@ -62,7 +82,8 @@ public class TeamService {
 		return true;
 	}
 
-	public BaseResponseStatus TeamDelete(String accessToken) {
+	// TODO: 팀 삭제와 동시에 유저 정보 수정 로직 추가
+	public BaseResponseStatus deleteTeam(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
@@ -81,7 +102,7 @@ public class TeamService {
 		return BaseResponseStatus.SUCCESS;
 	}
 
-	public BaseResponseStatus TeamJoin(String accessToken, String userEmail) {
+	public BaseResponseStatus joinTeam(String accessToken, String userEmail) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userInfo = userInfoRepository.findOneByUserEmail(userEmail);
 
@@ -89,7 +110,7 @@ public class TeamService {
 			return BaseResponseStatus.ALREADY_IN_TEAM;
 		}
 
-		UserTeam userTeam = userTeamRepository.findOneByTeamId(tokenInfo.getTeamId());
+		UserTeam userTeam = userTeamRepository.findOneByUserId(tokenInfo.getUserId());
 
 		if (userTeam == null) {
 			return BaseResponseStatus.TEAM_NOT_EXIST;
