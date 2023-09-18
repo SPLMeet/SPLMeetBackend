@@ -2,13 +2,14 @@ package com.back.splitmeet.src.team;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.back.splitmeet.jwt.JwtTokenProvider;
-import com.back.splitmeet.src.team.dto.TeamBanRes;
+import com.back.splitmeet.src.team.dto.PostCreateTeamRes;
 import com.back.splitmeet.util.BaseResponse;
 import com.back.splitmeet.util.BaseResponseStatus;
 
@@ -23,40 +24,55 @@ public class TeamController {
 	private final TeamService teamService;
 	private final JwtTokenProvider jwtTokenProvider;
 
+	@PutMapping("/create")
+	public BaseResponse<PostCreateTeamRes> createTeam(@RequestHeader("Authorization") String accessToken,
+		@RequestBody String teamName) {
+		PostCreateTeamRes postCreateTeamRes = teamService.createTeam(accessToken, teamName);
+
+		if (postCreateTeamRes == null) {
+			return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+		}
+		if (postCreateTeamRes.getTeam_idx() == -1) {
+			return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+		}
+		if (postCreateTeamRes.getTeam_idx() == 0) {
+			return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
+		}
+
+		return new BaseResponse<>(postCreateTeamRes);
+	}
+
 	@GetMapping("/ban")
-	public BaseResponse<BaseResponseStatus> teamBan(@RequestHeader("Authorization") String accessToken, @RequestParam
+	public BaseResponse<BaseResponseStatus> banUser(@RequestHeader("Authorization") String accessToken, @RequestParam
 	Long userId) {
 		Integer Role = jwtTokenProvider.getRoles(jwtTokenProvider.getUserInfoFromAcs(accessToken).getEmail()).getRole();
+
 		if (Role != 2) {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_AUTH);
 		}
 
-		TeamBanRes teamBanRes = teamService.TeamBan(accessToken, userId);
-
-		if (teamBanRes.getUserId() == null) {
-			return new BaseResponse<>(BaseResponseStatus.INVALID_AUTH);
-		} else {
-			return new BaseResponse<>(BaseResponseStatus.SUCCESS);
-		}
+		return teamService.banUser(accessToken, userId).getUserId() == null ?
+			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
+			new BaseResponse<>(BaseResponseStatus.SUCCESS);
 	}
 
 	@GetMapping("/out")
-	public BaseResponse<BaseResponseStatus> teamOut(@RequestHeader("Authorization") String accessToken) {
-		Boolean teamOut = teamService.TeamOut(accessToken);
-		if (teamOut) {
-			return new BaseResponse<>(BaseResponseStatus.LEADER_OR_NOT_MEMBER);
-		}
-		return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+	public BaseResponse<BaseResponseStatus> outTeam(@RequestHeader("Authorization") String accessToken) {
+		Boolean teamOut = teamService.outTeam(accessToken);
+
+		return teamOut ?
+			new BaseResponse<>(BaseResponseStatus.SUCCESS) :
+			new BaseResponse<>(BaseResponseStatus.LEADER_OR_NOT_MEMBER);
 	}
 
 	@GetMapping("/delete")
-	public BaseResponse<BaseResponseStatus> teamDelete(@RequestHeader("Authorization") String accessToken) {
-		return new BaseResponse<>(teamService.TeamDelete(accessToken));
+	public BaseResponse<BaseResponseStatus> deleteTeam(@RequestHeader("Authorization") String accessToken) {
+		return new BaseResponse<>(teamService.deleteTeam(accessToken));
 	}
 
 	@PutMapping("/join")
-	public BaseResponse<BaseResponseStatus> teamJoin(@RequestHeader("Authorization") String accessToken,
+	public BaseResponse<BaseResponseStatus> joinTeam(@RequestHeader("Authorization") String accessToken,
 		@RequestParam String userEmail) {
-		return new BaseResponse<>(teamService.TeamJoin(accessToken, userEmail));
+		return new BaseResponse<>(teamService.joinTeam(accessToken, userEmail));
 	}
 }
