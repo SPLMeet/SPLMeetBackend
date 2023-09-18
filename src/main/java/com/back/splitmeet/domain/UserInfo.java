@@ -73,7 +73,7 @@ public class UserInfo {
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payListId")
-	private List<payList> orders = new ArrayList<>(); // 유저 결제 내역
+	private List<PayList> orders = new ArrayList<>(); // 유저 결제 내역
 
 	@Builder(builderMethodName = "userBuilder", buildMethodName = "userBuild")
 	public UserInfo(String userEmail, String nickname, String userProfile) {

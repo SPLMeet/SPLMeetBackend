@@ -1,14 +1,19 @@
 package com.back.splitmeet.src.user;
 
+import java.util.List;
+import java.util.Objects;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.back.splitmeet.domain.RoleStatus;
 import com.back.splitmeet.domain.UserInfo;
+import com.back.splitmeet.domain.repository.PayListRepository;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
+import com.back.splitmeet.src.user.dto.GetReceiptRes;
 import com.back.splitmeet.src.user.dto.KakaoLoginRes;
 import com.back.splitmeet.util.BaseResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -20,14 +25,16 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class UserService {
-	private JwtTokenProvider jwtTokenProvider;
+	private final JwtTokenProvider jwtTokenProvider;
 	private final UserInfoRepository userInfoRepository;
+	private final PayListRepository payListRepository;
 
 	@Autowired
 	public UserService(JwtTokenProvider jwtTokenProvider,
-		UserInfoRepository userInfoRepository) {
+		UserInfoRepository userInfoRepository, PayListRepository payListRepository) {
 		this.jwtTokenProvider = jwtTokenProvider;
 		this.userInfoRepository = userInfoRepository;
+		this.payListRepository = payListRepository;
 	}
 
 	public KakaoLoginRes kakaoLogin(GetMemberToIdtoken idToken, String action) {
@@ -109,6 +116,21 @@ public class UserService {
 
 		kakaoLoginRes.setAccessToken(accessToken);
 		kakaoLoginRes.setRefreshToken(refreshToken);
+	}
+
+	public List<GetReceiptRes> getReceipt(String accessToken, Long userId) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (userinfo == null) {
+			return null;
+		}
+
+		if (!Objects.equals(userinfo.getUserId(), userId)) {
+			return null;
+		}
+
+		return payListRepository.findALLByUserinfo(userinfo);
 	}
 
 	public GetMemberToIdtoken tranJsonToGetMemberTo(String json) {
