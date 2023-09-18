@@ -35,7 +35,7 @@ public class UserTeam {
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDate startDate; // 팀 시작 날짜
 
-	@Column(nullable = false)
+	@Column
 	private LocalDate endDate; // 팀 종료 날짜
 
 	private Long teamTotalCost; // 팀 총 비용
