@@ -2,11 +2,11 @@ package com.back.splitmeet.src.team.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Setter
 public class PostCreateTeamRes {
-	private Long team_idx;
+    private Long team_idx;
 }

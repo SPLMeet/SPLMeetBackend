@@ -1,78 +1,57 @@
 package com.back.splitmeet.src.team;
 
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.src.team.dto.PostCreateTeamRes;
+import com.back.splitmeet.util.BaseException;
 import com.back.splitmeet.util.BaseResponse;
 import com.back.splitmeet.util.BaseResponseStatus;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @RestController
-@RequiredArgsConstructor
 @RequestMapping("/api/team")
 public class TeamController {
-	private final TeamService teamService;
-	private final JwtTokenProvider jwtTokenProvider;
+	@Autowired
+	private TeamService teamService;
+	@Autowired
+	private JwtTokenProvider jwtTokenProvider;
+
+	@ExceptionHandler(MethodArgumentNotValidException.class)
+	public BaseResponse<MethodArgumentNotValidException> handleValidationExceptions(
+		MethodArgumentNotValidException ex) {
+
+		return new BaseResponse<>(ex);
+	}
+
+	@ExceptionHandler(HttpMessageNotReadableException.class)
+	public BaseResponse<HttpMessageNotReadableException> handleNotReadableException(
+		HttpMessageNotReadableException ex) {
+		return new BaseResponse<>(ex);
+	}
 
 	@PutMapping("/create")
-	public BaseResponse<PostCreateTeamRes> createTeam(@RequestHeader("Authorization") String accessToken,
-		@RequestBody String teamName) {
-		PostCreateTeamRes postCreateTeamRes = teamService.createTeam(accessToken, teamName);
-
-		if (postCreateTeamRes == null) {
+	public BaseResponse<PostCreateTeamRes> createRoom(
+		@RequestHeader("Authorization") String token) throws
+		BaseException {
+		//jwtTokenProvider.verifySignature(token);
+		PostCreateTeamRes postCreateRoomRes = teamService.createRoom(token);
+		if (postCreateRoomRes == null) {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
 		}
-		if (postCreateTeamRes.getTeam_idx() == -1) {
+		if (postCreateRoomRes.getTeam_idx() == -1) {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
 		}
-		if (postCreateTeamRes.getTeam_idx() == 0) {
+		if (postCreateRoomRes.getTeam_idx() == 0) {
 			return new BaseResponse<>(BaseResponseStatus.INVALID_USER_JWT);
 		}
-
-		return new BaseResponse<>(postCreateTeamRes);
+		return new BaseResponse<>(postCreateRoomRes);
 	}
 
-	@GetMapping("/ban")
-	public BaseResponse<BaseResponseStatus> banUser(@RequestHeader("Authorization") String accessToken, @RequestParam
-	Long userId) {
-		Integer Role = jwtTokenProvider.getRoles(jwtTokenProvider.getUserInfoFromAcs(accessToken).getEmail()).getRole();
-
-		if (Role != 2) {
-			return new BaseResponse<>(BaseResponseStatus.INVALID_AUTH);
-		}
-
-		return teamService.banUser(accessToken, userId).getUserId() == null ?
-			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
-			new BaseResponse<>(BaseResponseStatus.SUCCESS);
-	}
-
-	@GetMapping("/out")
-	public BaseResponse<BaseResponseStatus> outTeam(@RequestHeader("Authorization") String accessToken) {
-		Boolean teamOut = teamService.outTeam(accessToken);
-
-		return teamOut ?
-			new BaseResponse<>(BaseResponseStatus.SUCCESS) :
-			new BaseResponse<>(BaseResponseStatus.LEADER_OR_NOT_MEMBER);
-	}
-
-	@GetMapping("/delete")
-	public BaseResponse<BaseResponseStatus> deleteTeam(@RequestHeader("Authorization") String accessToken) {
-		return new BaseResponse<>(teamService.deleteTeam(accessToken));
-	}
-
-	@PutMapping("/join")
-	public BaseResponse<BaseResponseStatus> joinTeam(@RequestHeader("Authorization") String accessToken,
-		@RequestParam String userEmail) {
-		return new BaseResponse<>(teamService.joinTeam(accessToken, userEmail));
-	}
 }
