@@ -16,7 +16,7 @@ import lombok.Setter;
 @Table(name = "payList")
 @Getter
 @Setter
-public class payList {
+public class PayList {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column
