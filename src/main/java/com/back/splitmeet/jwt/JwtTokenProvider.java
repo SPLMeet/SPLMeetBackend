@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
+import com.back.splitmeet.domain.RoleStatus;
 import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.dto.TokenInfo;
@@ -62,7 +63,7 @@ public class JwtTokenProvider {
 		this.jwtKey = Keys.hmacShaKeyFor(accessKeyBytes);
 	}
 
-	public String createAccessToken(Long userId, Long teamId, Integer role, String useremail, String name,
+	public String createAccessToken(Long userId, RoleStatus role, String useremail, String name,
 		String picture) {
 		Header headers = Jwts.header().setContentType("jwt");
 		Claims claims = Jwts.claims();
