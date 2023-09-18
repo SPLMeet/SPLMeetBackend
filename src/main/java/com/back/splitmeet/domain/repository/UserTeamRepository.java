@@ -6,4 +6,6 @@ import com.back.splitmeet.domain.UserTeam;
 
 public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
 	UserTeam findOneByTeamId(Long teamId);
+
+	UserTeam findOneByUserId(Long userId);
 }
