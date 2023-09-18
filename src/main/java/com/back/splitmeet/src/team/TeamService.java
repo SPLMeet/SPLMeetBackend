@@ -8,7 +8,6 @@ import com.back.splitmeet.domain.UserTeam;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.domain.repository.UserTeamRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
-
 import com.back.splitmeet.src.team.dto.PostCreateTeamRes;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +31,6 @@ public class TeamService {
 		if (userinfo.getTeamId() != 0) {
 			return new PostCreateTeamRes(0L);
 		}
-
 		if (userinfo.getRole() != 0) {
 			return new PostCreateTeamRes(-1L);
 		}

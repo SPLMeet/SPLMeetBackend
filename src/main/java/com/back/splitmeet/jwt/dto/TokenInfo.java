@@ -10,10 +10,8 @@ import lombok.NoArgsConstructor;
 public class TokenInfo {
 	private Long userId;
 	private String email;
-	private Integer role;
 	private String name;
 	private String picture;
-	private Long teamId;
 
 	public TokenInfo(long userId, String email, String name) {
 		this.userId = userId;

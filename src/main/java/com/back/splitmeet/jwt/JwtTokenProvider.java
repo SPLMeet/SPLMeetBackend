@@ -67,6 +67,7 @@ public class JwtTokenProvider {
 		Header headers = Jwts.header().setContentType("jwt");
 		Claims claims = Jwts.claims();
 		claims.put("userId", userId);
+		claims.put("teamId", teamId);
 		claims.put("role", role);
 		claims.put("email", useremail);
 		claims.put("name", name);
