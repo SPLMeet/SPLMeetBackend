@@ -3,6 +3,7 @@ package com.back.splitmeet.src.user;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.RoleStatus;
 import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
@@ -43,7 +44,7 @@ public class UserService {
 
 			userInfo = userInfoRepository.findOneByUserEmailAndUserName(idToken.getEmail(),
 				idToken.getNickname());
-			userInfo.setRole(0);
+			userInfo.setRole(RoleStatus.NONE);
 
 			setUserToken(idToken, kakaoLoginRes, userInfo);
 		} else if (action.equals("signin") && userInfo != null) {
@@ -93,7 +94,7 @@ public class UserService {
 	}
 
 	private void setUserToken(GetMemberToIdtoken idToken, KakaoLoginRes kakaoLoginRes, UserInfo userInfo) {
-		String accessToken = jwtTokenProvider.createAccessToken(userInfo.getUserId(), userInfo.getTeamId(),
+		String accessToken = jwtTokenProvider.createAccessToken(userInfo.getUserId(),
 			userInfo.getRole(),
 			idToken.getEmail(),
 			idToken.getNickname(), idToken.getPicture());
