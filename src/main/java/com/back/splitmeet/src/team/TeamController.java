@@ -2,7 +2,6 @@ package com.back.splitmeet.src.team;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,7 +23,7 @@ public class TeamController {
 
 	@PutMapping("/create")
 	public BaseResponse<PostCreateTeamRes> createTeam(@RequestHeader("Authorization") String accessToken,
-		@RequestBody String teamName) {
+		@RequestParam String teamName) {
 		PostCreateTeamRes postCreateTeamRes = teamService.createTeam(accessToken, teamName);
 
 		return new BaseResponse<>(postCreateTeamRes);

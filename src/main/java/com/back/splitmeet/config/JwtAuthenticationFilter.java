@@ -35,8 +35,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 				if (validateRefreshToken && isRefreshToken) {
 					String email = jwtTokenProvider.getUserEmail(refreshToken);
 					UserInfo userinfo = jwtTokenProvider.getRoles(email);
-					String newAccessToken = jwtTokenProvider.createAccessToken(userinfo.getUserId(),
-						userinfo.getTeamId(), userinfo.getRole(), userinfo.getUserEmail(), userinfo.getUserName(),
+					String newAccessToken = jwtTokenProvider.createAccessToken(userinfo.getUserId(), userinfo.getRole(),
+						userinfo.getUserEmail(), userinfo.getUserName(),
 						userinfo.getUserProfile());
 					response.setHeader("Authorization", accessToken);
 					this.setAuthentication(newAccessToken);
