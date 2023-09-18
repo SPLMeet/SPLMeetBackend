@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,18 +30,17 @@ import lombok.Setter;
 public class UserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(nullable = false)
 	private Long userId; // 유저 Id
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "BIGINT default 0")
 	private Long teamId; // 팀 Id (없는 경우 : 0)
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime createAt; // 유저 생성 시간
 
 	private LocalDateTime updateAt; // 유저 업데이트 시간
 
-	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'NONE'")
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'N'")
 	@Enumerated(EnumType.STRING)
 	private UserStatus status; // 유저 상태
 
@@ -92,13 +92,12 @@ public class UserInfo {
 		return new UserInfo(userEmail, nickname, userProfile);
 	}
 
-	//==리더 생성 매서드 == //
-	public static UserInfo createTeamLeader(Long teamId) {
-		UserInfo userInfo = new UserInfo();
-		userInfo.setTeamId(teamId);
-		userInfo.setRole(RoleStatus.LEADER);
-
-		return userInfo;
+	@PrePersist
+	public void prePersist() {
+		this.teamId = this.teamId == null ? 0L : this.teamId;
+		this.createAt = this.createAt == null ? LocalDateTime.now() : this.createAt;
+		this.role = this.role == null ? RoleStatus.NONE : this.role;
+		this.status = this.status == null ? UserStatus.Maintain : this.status;
+		this.submitMoney = this.submitMoney == null ? SubmitMoneyStatus.NONE : this.submitMoney;
 	}
-
 }
