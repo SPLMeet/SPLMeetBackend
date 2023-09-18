@@ -1,5 +1,7 @@
 package com.back.splitmeet.src.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,6 +17,7 @@ import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.src.auth.AuthService;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
+import com.back.splitmeet.src.user.dto.GetReceiptRes;
 import com.back.splitmeet.src.user.dto.GetUserInfoRes;
 import com.back.splitmeet.src.user.dto.KakaoLoginReq;
 import com.back.splitmeet.src.user.dto.KakaoLoginRes;
@@ -92,5 +95,14 @@ public class UserController {
 	public BaseResponse<GetUserInfoRes> userDelete(@PathVariable("userid") Long userId,
 		@RequestHeader("Authorization") String accessToken) {
 		return new BaseResponse<>(userService.userDelete(userId, accessToken));
+	}
+
+	@GetMapping("/receipt/{userId}")
+	public BaseResponse<List<GetReceiptRes>> getReceipt(@RequestHeader("Authorization") String accessToken,
+		@PathVariable("userId") Long userId) {
+		List<GetReceiptRes> ResceiptList = userService.getReceipt(accessToken, userId);
+		return ResceiptList == null ?
+			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
+			new BaseResponse<>(ResceiptList);
 	}
 }
