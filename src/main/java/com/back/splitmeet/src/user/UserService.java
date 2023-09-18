@@ -94,7 +94,7 @@ public class UserService {
 	}
 
 	private void setUserToken(GetMemberToIdtoken idToken, KakaoLoginRes kakaoLoginRes, UserInfo userInfo) {
-		String accessToken = jwtTokenProvider.createAccessToken(userInfo.getUserId(), userInfo.getTeamId(),
+		String accessToken = jwtTokenProvider.createAccessToken(userInfo.getUserId(),
 			userInfo.getRole(),
 			idToken.getEmail(),
 			idToken.getNickname(), idToken.getPicture());
