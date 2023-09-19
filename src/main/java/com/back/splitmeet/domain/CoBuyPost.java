@@ -28,7 +28,7 @@ public class CoBuyPost {
 	@Column(nullable = false)
 	private Long idx; // 게시물 Id
 
-	private Integer localMoney; // 게시물 금액
+	private Long localMoney; // 게시물 금액
 
 	@Column(nullable = false, length = 50)
 	private String localName; // 게시물 이름
