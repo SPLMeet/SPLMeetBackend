@@ -1,9 +1,12 @@
 package com.back.splitmeet.domain.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.back.splitmeet.domain.UserInfo;
+import com.back.splitmeet.src.split.dto.SplitCheckRes;
 
 @Repository
 public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
@@ -14,4 +17,10 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	boolean existsByRefreshToken(String refreshToken);
 
 	UserInfo findByUserEmail(String userEmail);
+
+	UserInfo findOneByUserEmail(String userEmail);
+
+	List<UserInfo> findAllByTeamId(Long teamId);
+
+	List<SplitCheckRes> findALLByTeamId(Long teamId);
 }

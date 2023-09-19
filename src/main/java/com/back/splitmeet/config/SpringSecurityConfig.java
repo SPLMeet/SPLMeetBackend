@@ -12,7 +12,11 @@ public class SpringSecurityConfig {
 	// 에러로 경고가 뜨지만 security 이후 버전에서 제거될 예정이라 뜨는것 build 및 사용은 정상적으로 됨.
 	@Bean
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http.authorizeRequests()
+		http
+			.csrf().disable().cors()
+			.and()
+			.authorizeRequests()
+			.requestMatchers("/api/").permitAll()
 			.and()
 			.httpBasic();
 

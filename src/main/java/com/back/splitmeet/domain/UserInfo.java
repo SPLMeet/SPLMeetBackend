@@ -6,12 +6,16 @@ import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,41 +29,51 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UserInfo {
 	@Id
-	@GeneratedValue
-	@Column(nullable = false)
-	private Long userId;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long userId; // 유저 Id
 
-	private Long teamId;
+	@Column(nullable = false, columnDefinition = "BIGINT default 0")
+	private Long teamId; // 팀 Id (없는 경우 : 0)
 
-	private LocalDateTime createAt;
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+	private LocalDateTime createAt; // 유저 생성 시간
 
-	private LocalDateTime updateAt;
+	private LocalDateTime updateAt; // 유저 업데이트 시간
 
-	private UserStatus status;
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'N'")
+	@Enumerated(EnumType.STRING)
+	private UserStatus status; // 유저 상태
 
-	private String userName;
+	@Column(nullable = false, length = 45)
+	private String userName; // 유저 이름
 
-	private String userProfile;
+	@Column(nullable = false, columnDefinition = "TEXT")
+	private String userProfile; // 유저 프로필 사진
 
-	private String userEmail;
+	@Column(nullable = false, length = 45)
+	private String userEmail; // 유저 이메일
 
-	private Integer role;
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'NONE'")
+	@Enumerated(EnumType.STRING)
+	private RoleStatus role; // 유저 권한
 
-	private Integer submitMoney;
+	@Column(nullable = false, columnDefinition = "VARCHAR(10) default 'DONE'")
+	@Enumerated(EnumType.STRING)
+	private SubmitMoneyStatus submitMoney; // 유저 정산 여부
 
 	@Column(columnDefinition = "TEXT")
-	private String accessToken;
+	private String accessToken; // 유저 토큰
 
 	@Column(columnDefinition = "TEXT")
-	private String refreshToken;
+	private String refreshToken; // 유저 토큰
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "team")
-	private UserTeam userteam;
+	private UserTeam userteam; // 유저 팀
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payListId")
-	private List<payList> orders = new ArrayList<>();
+	private List<PayList> orders = new ArrayList<>(); // 유저 결제 내역
 
 	@Builder(builderMethodName = "userBuilder", buildMethodName = "userBuild")
 	public UserInfo(String userEmail, String nickname, String userProfile) {
@@ -76,5 +90,14 @@ public class UserInfo {
 
 	public static UserInfo createUser(String userEmail, String nickname, String userProfile) {
 		return new UserInfo(userEmail, nickname, userProfile);
+	}
+
+	@PrePersist
+	public void prePersist() {
+		this.teamId = this.teamId == null ? 0L : this.teamId;
+		this.createAt = this.createAt == null ? LocalDateTime.now() : this.createAt;
+		this.role = this.role == null ? RoleStatus.NONE : this.role;
+		this.status = this.status == null ? UserStatus.Maintain : this.status;
+		this.submitMoney = this.submitMoney == null ? SubmitMoneyStatus.NONE : this.submitMoney;
 	}
 }
