@@ -47,14 +47,14 @@ public class GeneralPost {
 
 	@Builder
 	public GeneralPost(Long localId, String localName, String localMoneyDescription, String localWeb, String localTime,
-		String localAddress, String localNum) {
+		String localAddress, String localPhone) {
 		this.localId = localId;
 		this.localName = localName;
 		this.localMoneyDescription = localMoneyDescription;
 		this.localWeb = localWeb;
 		this.localTime = localTime;
 		this.localAddress = localAddress;
-		this.localNum = localNum;
+		this.localPhone = localPhone;
 	}
 
 	@OneToMany
