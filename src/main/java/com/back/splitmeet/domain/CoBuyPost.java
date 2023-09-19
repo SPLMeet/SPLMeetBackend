@@ -12,18 +12,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Table(name = "coBuyPost")
 @Getter
 @Setter
+@NoArgsConstructor
 public class CoBuyPost {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(nullable = false)
-	private Long localId; // 게시물 Id
+	private Long idx; // 게시물 Id
 
 	private Integer localMoney; // 게시물 금액
 
@@ -44,8 +47,17 @@ public class CoBuyPost {
 
 	@Column(nullable = false)
 	private LocalDateTime timeLimit; // 게시물 시간 제한
+  
+  @Builder
+	public CoBuyPost(Long idx, Long localMoney, String localName, String localDesription, String localAddress) {
+		this.idx = idx;
+		this.localMoney = localMoney;
+		this.localName = localName;
+		this.localDesription = localDesription;
+		this.localAddress = localAddress;
+	}
 
 	@OneToMany
-	@JoinColumn(name = "PostImg")
+	@JoinColumn(name = "localId")
 	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>(); // 게시물 이미지
 }
