@@ -103,7 +103,7 @@ public class BoardService {
 				.localAddress(req.getLocalAddress())
 				.localWeb(req.getLocalWeb())
 				.localTime(req.getLocalTime())
-				.localNum(req.getLocalNumber())
+				.localPhone(req.getLocalNumber())
 				.localMoneyDescription(req.getLocalMoneyDescription())
 				.localName(req.getLocalName())
 				.build();
