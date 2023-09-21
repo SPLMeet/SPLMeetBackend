@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.back.splitmeet.domain.UserInfo;
+import com.back.splitmeet.domain.UserTeam;
 import com.back.splitmeet.src.split.dto.SplitCheckRes;
 
 @Repository
@@ -23,4 +24,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 	List<UserInfo> findAllByTeamId(Long teamId);
 
 	List<SplitCheckRes> findALLByTeamId(Long teamId);
+
+	List<UserInfo> findAllByUserTeam(UserTeam userTeam);
 }

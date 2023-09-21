@@ -1,12 +1,17 @@
 package com.back.splitmeet.domain;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.PrePersist;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,10 +40,13 @@ public class UserTeam {
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDate startDate; // 팀 시작 날짜
 
-	@Column
+	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDate endDate; // 팀 종료 날짜
 
 	private Long teamTotalCost; // 팀 총 비용
+
+	@OneToMany(mappedBy = "userTeam")
+	private List<UserInfo> userInfo = new ArrayList<>();
 
 	@Column(length = 20, columnDefinition = "VARCHAR(20) default 'NONE'")
 	private String leaderKakaoHash; // 팀장 카카오 해시태그
@@ -47,6 +55,17 @@ public class UserTeam {
 	public UserTeam(Long teamLeader, String teamName) {
 		this.teamLeader = teamLeader;
 		this.teamName = teamName;
+	}
+
+	@PrePersist
+	public void prePersist() {
+
+		this.teamName = this.teamName == null ? "NONE" : this.teamName;
+		this.teamLeader = this.teamLeader == null ? 0L : this.teamLeader;
+		this.teamSettleStatus = this.teamSettleStatus == null ? false : this.teamSettleStatus;
+		this.startDate = this.startDate == null ? LocalDate.now() : this.startDate;
+		this.endDate = this.endDate == null ? LocalDate.now() : this.endDate;
+		this.teamTotalCost = this.teamTotalCost == null ? 0L : this.teamTotalCost;
 	}
 
 }
