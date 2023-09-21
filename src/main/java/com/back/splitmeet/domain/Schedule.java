@@ -7,13 +7,16 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Data
 @Table(name = "schedule")
+@NoArgsConstructor
 @Getter
 @Setter
 public class Schedule {
@@ -25,7 +28,10 @@ public class Schedule {
 	@Column(nullable = false)
 	private Long teamId;
 
-	private ZonedDateTime date;
+	@Column()
+	private ZonedDateTime startTime;
+
+	private ZonedDateTime endTime;
 
 	private String place;
 

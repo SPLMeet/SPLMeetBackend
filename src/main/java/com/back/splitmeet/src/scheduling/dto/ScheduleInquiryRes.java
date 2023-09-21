@@ -1,5 +1,9 @@
 package com.back.splitmeet.src.scheduling.dto;
 
+import java.util.List;
+
+import com.back.splitmeet.domain.Schedule;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -9,12 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class ScheduleCommunityRes {
-	private String date;
-
-	private String time;
-
-	private String place;
-
-	private Integer cost;
+public class ScheduleInquiryRes {
+	private List<Schedule> schedule;
 }

@@ -1,20 +1,18 @@
 package com.back.splitmeet.src.scheduling;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.back.splitmeet.src.scheduling.dto.ScheduleCommunityReq;
-import com.back.splitmeet.src.scheduling.dto.ScheduleCommunityRes;
+import com.back.splitmeet.src.scheduling.dto.ScheduleAddReq;
+import com.back.splitmeet.src.scheduling.dto.ScheduleInquiryRes;
 import com.back.splitmeet.src.scheduling.dto.ScheduleModifyReq;
-import com.back.splitmeet.src.scheduling.dto.ScheduleModifyRes;
 import com.back.splitmeet.util.BaseResponse;
+import com.back.splitmeet.util.BaseResponseStatus;
 
 @RestController
 @RequestMapping("/api/schedule")
@@ -23,18 +21,32 @@ public class ScheduleController {
 	private ScheduleService scheduleService;
 
 	@Autowired
-	private ScheduleModifyService scheduleModifyService;
+	private ScheduleRegisterService scheduleRegisterService;
 
-	@GetMapping("/community")
-	public BaseResponse<List<ScheduleCommunityRes>> inquireSchedule(@ModelAttribute ScheduleCommunityReq req) {
-		List<ScheduleCommunityRes> scheduleCommunityRes = scheduleService.inquireSchedule(req);
-		return new BaseResponse<>(scheduleCommunityRes);
+	@GetMapping("/inquiry")
+	public BaseResponse<ScheduleInquiryRes> inquireSchedule(@RequestParam(value = "Authorization") String accessToken) {
+		ScheduleInquiryRes scheduleInquiryRes = scheduleService.inquireSchedule(accessToken);
+		return new BaseResponse<>(scheduleInquiryRes);
 	}
 
 	@PostMapping("/modify")
-	public BaseResponse<ScheduleModifyRes> modifySchedule(@RequestBody ScheduleModifyReq req) {
-		ScheduleModifyRes scheduleModifyRes = scheduleModifyService.modifySchedule(req);
-		return new BaseResponse<>(scheduleModifyRes);
+	public BaseResponse<BaseResponseStatus> modifySchedule(@RequestBody ScheduleModifyReq req) {
+		Boolean scheduleModifyRes = scheduleRegisterService.modifySchedule(req);
+		if (scheduleModifyRes == null) {
+			return new BaseResponse<>(BaseResponseStatus.SCHEDULE_NOT_CHANGED);
+		} else {
+			return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+		}
+
+	}
+
+	@PostMapping("/add")
+	public BaseResponse<BaseResponseStatus> addSchedule(@RequestBody ScheduleAddReq req) {
+		Boolean scheduleAddRes = scheduleRegisterService.addSchedule(req);
+		if (scheduleAddRes == null) {
+			return new BaseResponse<>(BaseResponseStatus.SCHEDULE_ADD_FAIL);
+		}
+		return new BaseResponse<>(BaseResponseStatus.SUCCESS);
 	}
 
 }
