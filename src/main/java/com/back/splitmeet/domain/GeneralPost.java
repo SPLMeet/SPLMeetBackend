@@ -45,6 +45,9 @@ public class GeneralPost {
 	@Column(nullable = false, length = 50)
 	private String localPhone; // 게시물 전화번호
 
+	@OneToMany(mappedBy = "generalPost")
+	private List<GeneralPostImg> generalpostImgs = new ArrayList<>();
+
 	@Builder
 	public GeneralPost(Long localId, String localName, String localMoneyDescription, String localWeb, String localTime,
 		String localAddress, String localPhone) {
@@ -57,7 +60,5 @@ public class GeneralPost {
 		this.localPhone = localPhone;
 	}
 
-	@OneToMany
-	@JoinColumn(name = "PostImg")
-	private List<GeneralPostImg> generalpostImgs = new ArrayList<>();
+
 }

@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -47,8 +46,11 @@ public class CoBuyPost {
 
 	@Column(nullable = false)
 	private LocalDateTime timeLimit; // 게시물 시간 제한
-  
-  @Builder
+
+	@OneToMany(mappedBy = "coBuyPost")
+	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>(); // 게시물 이미지
+
+	@Builder
 	public CoBuyPost(Long idx, Long localMoney, String localName, String localDesription, String localAddress) {
 		this.idx = idx;
 		this.localMoney = localMoney;
@@ -57,7 +59,4 @@ public class CoBuyPost {
 		this.localAddress = localAddress;
 	}
 
-	@OneToMany
-	@JoinColumn(name = "localId")
-	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>(); // 게시물 이미지
 }
