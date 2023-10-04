@@ -37,14 +37,14 @@ public class TeamController {
 			new BaseResponse<>(BaseResponseStatus.SUCCESS);
 	}
 
-	@GetMapping("/out")
-	public BaseResponse<BaseResponseStatus> outTeam(@RequestHeader("Authorization") String accessToken) {
-		Boolean teamOut = teamService.outTeam(accessToken);
-
-		return teamOut ?
-			new BaseResponse<>(BaseResponseStatus.SUCCESS) :
-			new BaseResponse<>(BaseResponseStatus.LEADER_OR_NOT_MEMBER);
-	}
+	// @GetMapping("/out")
+	// public BaseResponse<BaseResponseStatus> outTeam(@RequestHeader("Authorization") String accessToken) {
+	// 	Boolean teamOut = teamService.outTeam(accessToken);
+	//
+	// 	return teamOut ?
+	// 		new BaseResponse<>(BaseResponseStatus.SUCCESS) :
+	// 		new BaseResponse<>(BaseResponseStatus.LEADER_OR_NOT_MEMBER);
+	// }
 
 	@GetMapping("/delete")
 	public BaseResponse<BaseResponseStatus> deleteTeam(@RequestHeader("Authorization") String accessToken) {

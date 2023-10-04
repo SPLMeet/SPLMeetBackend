@@ -25,11 +25,10 @@ public class SplitService {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo requester = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
-		if (requester.getTeamId() == 0 || !requester.getRole().equals(RoleStatus.LEADER)) {
+		if (requester.getUserTeam().getTeamId() == 0 || !requester.getRole().equals(RoleStatus.LEADER)) {
 			return null;
 		}
-		List<SplitCheckRes> splitCheckRes = userInfoRepository.findALLByTeamId(requester.getTeamId());
-
-		return splitCheckRes;
+		return requester.getUserTeam().getUserInfo().stream()
+			.map(SplitCheckRes::new).toList();
 	}
 }

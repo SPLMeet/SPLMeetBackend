@@ -1,9 +1,10 @@
 package com.back.splitmeet.src.team;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.back.splitmeet.domain.RoleStatus;
 import com.back.splitmeet.domain.UserInfo;
@@ -26,26 +27,47 @@ public class TeamService {
 	private final JwtTokenProvider jwtTokenProvider;
 	private final UserTeamRepository userTeamRepository;
 
+	/**
+	 * 팀 생성
+	 *
+	 * @param accessToken
+	 * @param teamName
+	 * @return
+	 */
+	@Transactional
 	public PostCreateTeamRes createTeam(String accessToken, String teamName) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
-		if (userinfo == null) {
+		if (userinfo == null || userinfo.getUserTeam() == null) {
 			return new PostCreateTeamRes(null);
 		}
-		if (userinfo.getTeamId() != 0) {
+
+		if (userinfo.getRole() != RoleStatus.NONE) {
 			return new PostCreateTeamRes(null);
 		}
-		UserTeam userTeam = new UserTeam(tokenInfo.getUserId(), teamName);
+
+		UserTeam userTeam = new UserTeam();
+		userTeam.setTeamLeader(userinfo.getUserId());
+		userTeam.setTeamName(teamName);
+
 		userTeamRepository.save(userTeam);
 
+		userinfo.setUserTeam(userTeam);
 		userinfo.setRole(RoleStatus.LEADER);
-		userinfo.setTeamId(userTeam.getTeamId());
 		userInfoRepository.save(userinfo);
 
 		return new PostCreateTeamRes(userinfo.getUserId());
 	}
 
+	/**
+	 * 팀 가입
+	 *
+	 * @param accessToken
+	 * @param userId
+	 * @return
+	 */
+	@Transactional
 	public TeamBanRes banUser(String accessToken, Long userId) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 
@@ -56,30 +78,55 @@ public class TeamService {
 			return new TeamBanRes(null);
 		}
 
-		if (!Objects.equals(userInfo.getTeamId(), banUser.getTeamId())) {
+		UserTeam banUserTeam = banUser.getUserTeam();
+
+		if (banUserTeam == null || !banUser.getUserTeam().getTeamId().equals(userInfo.getUserTeam().getTeamId())) {
 			return new TeamBanRes(null);
 		} else {
 			banUser.setRole(RoleStatus.NONE);
-			banUser.setTeamId(0L);
+			// 유저의 팀 연결을 해제 (팀에서 벤)
+			banUser.setUserTeam(null);
+			// UserTeam 엔터티에서도 유저를 제거
+			banUserTeam.getUserInfo().remove(banUser);
+
+			// 변경사항을 데이터베이스에 저장
 			userInfoRepository.save(banUser);
+			userTeamRepository.save(banUserTeam);
 			return new TeamBanRes(userId);
 		}
 	}
 
-	public Boolean outTeam(String accessToken) {
+	/**
+	 * 팀 탈퇴
+	 *
+	 * @param accessToken
+	 * @return
+	 */
+	@Transactional
+	public BaseResponseStatus leaveTeam(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
-		if (userInfo.getRole() != RoleStatus.NONE) {
-			return false;
+		UserTeam userTeam = userInfo.getUserTeam();
+		if (userInfo.getRole() != RoleStatus.MEMBER) {
+			return BaseResponseStatus.TEAM_NOT_MEMBER;
 		}
+		userInfo.setUserTeam(null);
 		userInfo.setRole(RoleStatus.NONE);
-		userInfo.setTeamId(0L);
+		userTeam.getUserInfo().remove(userInfo);
 		userInfoRepository.save(userInfo);
-		return true;
+		userTeamRepository.save(userTeam);
+		return BaseResponseStatus.SUCCESS;
 	}
 
 	// TODO: 팀 삭제와 동시에 유저 정보 수정 로직 추가
-	// DONE
+
+	/**
+	 * 팀 삭제
+	 *
+	 * @param accessToken
+	 * @return
+	 */
+	@Transactional
 	public BaseResponseStatus deleteTeam(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
@@ -87,34 +134,69 @@ public class TeamService {
 		if (userInfo.getRole() != RoleStatus.LEADER) {
 			return BaseResponseStatus.TEAM_NOT_LEADER;
 		}
-		UserTeam userTeam = userTeamRepository.findOneByTeamId(userInfo.getTeamId());
+		UserTeam userTeam = userInfo.getUserTeam();
 		if (userTeam == null) {
 			return BaseResponseStatus.TEAM_NOT_EXIST;
 		}
-		List<UserInfo> userInfos = userInfoRepository.findAllByTeamId(userInfo.getTeamId());
-		for (UserInfo user : userInfos) {
-			user.setTeamId(0L);
-			user.setRole(RoleStatus.NONE);
-			userInfoRepository.save(user);
+
+		// 팀에 속한 모든 사용자의 팀 정보를 null로 설정
+		List<UserInfo> teamMembers = userInfoRepository.findAllByUserTeam(userTeam);
+		for (UserInfo member : teamMembers) {
+			member.setUserTeam(null);
+
 		}
+		userInfoRepository.saveAll(teamMembers);
 		userTeamRepository.delete(userTeam);
 		return BaseResponseStatus.SUCCESS;
 	}
 
+	/**
+	 * 팀 가입
+	 *
+	 * @param accessToken
+	 * @param userEmail
+	 * @return
+	 */
+	@Transactional
 	public BaseResponseStatus joinTeam(String accessToken, String userEmail) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
-		UserInfo userInfo = userInfoRepository.findOneByUserEmail(userEmail);
+		UserInfo inviteUserInfo = userInfoRepository.findOneByUserEmail(userEmail);
+		UserInfo ownerUserInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
-		if (userInfo.getTeamId() != 0) {
+		if (inviteUserInfo.getUserTeam() != null) {
 			return BaseResponseStatus.ALREADY_IN_TEAM;
 		}
-		UserTeam userTeam = userTeamRepository.findOneByTeamId(userInfo.getTeamId());
-		if (userTeam == null) {
-			return BaseResponseStatus.TEAM_NOT_EXIST;
+
+		if (ownerUserInfo.getRole() != RoleStatus.LEADER) {
+			return BaseResponseStatus.TEAM_NOT_LEADER;
 		}
-		userInfo.setTeamId(userTeam.getTeamId());
-		userInfo.setRole(RoleStatus.MEMBER);
-		userInfoRepository.save(userInfo);
+
+		UserTeam ownerUserTeam = ownerUserInfo.getUserTeam();
+		inviteUserInfo.setUserTeam(ownerUserTeam);
+		inviteUserInfo.setRole(RoleStatus.MEMBER);
+		userInfoRepository.save(inviteUserInfo);
 		return BaseResponseStatus.SUCCESS;
 	}
+
+	/**
+	 * 팀원 목록 조회
+	 *
+	 * @param accessToken
+	 * @return
+	 */
+	@Transactional(readOnly = true)
+	public List<UserInfo> getTeamMembers(String accessToken) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		// 유저가 속한 팀을 찾음
+		UserTeam userTeam = userInfo.getUserTeam();
+		if (userTeam == null) {
+			throw new IllegalArgumentException("The user is not a member of any team");
+		}
+
+		// 팀에 속한 모든 유저들을 불러옴
+		return new ArrayList<>(userTeam.getUserInfo());
+	}
+
 }

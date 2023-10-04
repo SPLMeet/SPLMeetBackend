@@ -32,9 +32,6 @@ public class UserInfo {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId; // 유저 Id
 
-	@Column(nullable = false, columnDefinition = "BIGINT default 0")
-	private Long teamId; // 팀 Id (없는 경우 : 0)
-
 	@Column(nullable = false, columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
 	private LocalDateTime createAt; // 유저 생성 시간
 
@@ -68,8 +65,8 @@ public class UserInfo {
 	private String refreshToken; // 유저 토큰
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "team")
-	private UserTeam userteam; // 유저 팀
+	@JoinColumn(name = "teamId")
+	private UserTeam userTeam; // 유저 팀
 
 	@OneToMany(fetch = FetchType.LAZY)
 	@JoinColumn(name = "payListId")
@@ -94,7 +91,7 @@ public class UserInfo {
 
 	@PrePersist
 	public void prePersist() {
-		this.teamId = this.teamId == null ? 0L : this.teamId;
+
 		this.createAt = this.createAt == null ? LocalDateTime.now() : this.createAt;
 		this.role = this.role == null ? RoleStatus.NONE : this.role;
 		this.status = this.status == null ? UserStatus.Maintain : this.status;
