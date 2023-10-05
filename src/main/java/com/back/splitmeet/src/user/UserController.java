@@ -96,10 +96,10 @@ public class UserController {
 		return new BaseResponse<>(userService.userLogout(accessToken));
 	}
 
-	@DeleteMapping("/{userid}")
-	public BaseResponse<GetUserInfoRes> userDelete(@PathVariable("userid") Long userId,
+	@DeleteMapping("/delete")
+	public BaseResponse<GetUserInfoRes> userDelete(
 		@RequestHeader("Authorization") String accessToken) {
-		return new BaseResponse<>(userService.userDelete(userId, accessToken));
+		return new BaseResponse<>(userService.userDelete(accessToken));
 	}
 
 	@GetMapping("/receipt/{userId}")

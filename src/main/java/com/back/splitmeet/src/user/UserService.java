@@ -86,13 +86,11 @@ public class UserService {
 		return BaseResponseStatus.SUCCESS;
 	}
 
-	public BaseResponseStatus userDelete(Long userId, String accessToken) {
+	public BaseResponseStatus userDelete(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
-		if (tokenInfo.getUserId() != userId) {
-			return BaseResponseStatus.INVALID_AUTH;
-		} else if (userinfo == null) {
+		if (userinfo == null) {
 			return BaseResponseStatus.INVALID_AUTH;
 		}
 
