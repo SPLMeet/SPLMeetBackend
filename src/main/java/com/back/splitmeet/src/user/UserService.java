@@ -15,6 +15,7 @@ import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
 import com.back.splitmeet.src.user.dto.GetReceiptRes;
 import com.back.splitmeet.src.user.dto.KakaoLoginRes;
+import com.back.splitmeet.src.user.dto.SearchUserInfoRes;
 import com.back.splitmeet.util.BaseResponseStatus;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -144,5 +145,18 @@ public class UserService {
 		} catch (JsonProcessingException e) {
 			return null;
 		}
+	}
+
+	/**
+	 *  유저 정보 조회
+	 * @param accessToken
+	 * @return
+	 */
+	public SearchUserInfoRes getUserInfo(String accessToken) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+		SearchUserInfoRes searchUserInfoRes = new SearchUserInfoRes(userinfo.getUserId(), userinfo.getUserEmail(),
+			userinfo.getUserName(), userinfo.getUserProfile());
+		return searchUserInfoRes;
 	}
 }
