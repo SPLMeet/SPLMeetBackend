@@ -8,7 +8,6 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class GetBoardsRes {
-	List<GetBoardRes> localList;
-	List<GetBoardRes> timeList;
-	List<GetBoardRes> seatList;
+	String title;
+	List<GetBoardRes> childList;
 }

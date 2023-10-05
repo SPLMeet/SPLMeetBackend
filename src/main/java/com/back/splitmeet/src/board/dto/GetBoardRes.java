@@ -11,13 +11,12 @@ import lombok.Data;
 @AllArgsConstructor
 @Data
 public class GetBoardRes {
-	Long localMoney;
-	String localName;
-	String localDescription;
-	String localAddress;
-	Long targetNumber;
-	Long status;
-	LocalDateTime timeLimit;
-	List<String> localPhoto;
+	// 공통
 	Long localId;
+	String localName;
+	String localAddress;
+	List<String> localPhoto;
+	// CoBuyPost
+	LocalDateTime timeLimit;
+
 }
