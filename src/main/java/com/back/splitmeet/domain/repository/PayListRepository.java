@@ -12,4 +12,6 @@ import com.back.splitmeet.src.user.dto.GetReceiptRes;
 @Repository
 public interface PayListRepository extends JpaRepository<PayList, Long> {
 	List<GetReceiptRes> findALLByUserinfo(UserInfo userinfo);
+
+	List<PayList> findByCoBuyPostIdx(Long idx);
 }
