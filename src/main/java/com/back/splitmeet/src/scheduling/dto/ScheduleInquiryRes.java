@@ -3,6 +3,7 @@ package com.back.splitmeet.src.scheduling.dto;
 import java.util.List;
 
 import com.back.splitmeet.domain.Schedule;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,5 +15,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ScheduleInquiryRes {
-	private List<Schedule> schedule;
+
+	private Long teamId;
+
+	private String teamName;
+
+	@JsonProperty(value = "schedule")
+	private List<ScheduleInquiryInfo> scheduleInquiryInfo;
 }
