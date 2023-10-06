@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.src.auth.AuthService;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
@@ -21,6 +20,7 @@ import com.back.splitmeet.src.user.dto.GetReceiptRes;
 import com.back.splitmeet.src.user.dto.GetUserInfoRes;
 import com.back.splitmeet.src.user.dto.KakaoLoginReq;
 import com.back.splitmeet.src.user.dto.KakaoLoginRes;
+import com.back.splitmeet.src.user.dto.SearchUserInfoRes;
 import com.back.splitmeet.util.BaseResponse;
 import com.back.splitmeet.util.BaseResponseStatus;
 
@@ -76,25 +76,30 @@ public class UserController {
 		}
 	}
 
-	@GetMapping("/{userid}")
-	public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable("userid") Long userId) {
-		UserInfo user = userInfoRepository.findOneByUserId(userId);
-		if (user == null) {
-			return new BaseResponse<>(BaseResponseStatus.INVALID_AUTH);
-		}
-		GetUserInfoRes getUserInfoRes = new GetUserInfoRes(user.getUserProfile());
-		return new BaseResponse<>(getUserInfoRes);
-	}
-
+	/**
+	 * 유저 정보 조회 API
+	 * 토큰 없이도 조회 가능
+	 * @param accessToken
+	 * @return
+	 */
+	// @GetMapping("/{userid}")
+	// public BaseResponse<GetUserInfoRes> getUserInfo(@PathVariable("userid") Long userId) {
+	// 	UserInfo user = userInfoRepository.findOneByUserId(userId);
+	// 	if (user == null) {
+	// 		return new BaseResponse<>(BaseResponseStatus.INVALID_AUTH);
+	// 	}
+	// 	GetUserInfoRes getUserInfoRes = new GetUserInfoRes(user.getUserProfile());
+	// 	return new BaseResponse<>(getUserInfoRes);
+	// }
 	@GetMapping("/logout")
 	public BaseResponse<String> userLogout(@RequestHeader(value = "Authorization") String accessToken) {
 		return new BaseResponse<>(userService.userLogout(accessToken));
 	}
 
-	@DeleteMapping("/{userid}")
-	public BaseResponse<GetUserInfoRes> userDelete(@PathVariable("userid") Long userId,
+	@DeleteMapping("/delete")
+	public BaseResponse<GetUserInfoRes> userDelete(
 		@RequestHeader("Authorization") String accessToken) {
-		return new BaseResponse<>(userService.userDelete(userId, accessToken));
+		return new BaseResponse<>(userService.userDelete(accessToken));
 	}
 
 	@GetMapping("/receipt/{userId}")
@@ -104,5 +109,10 @@ public class UserController {
 		return ResceiptList == null ?
 			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
 			new BaseResponse<>(ResceiptList);
+	}
+
+	@GetMapping("/userInfo")
+	public BaseResponse<SearchUserInfoRes> getUserInfomat(@RequestHeader(value = "Authorization") String accessToken) {
+		return new BaseResponse<>(userService.getUserInfo(accessToken));
 	}
 }
