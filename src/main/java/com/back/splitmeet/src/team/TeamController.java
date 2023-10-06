@@ -24,9 +24,7 @@ public class TeamController {
 	@PutMapping("/create")
 	public BaseResponse<PostCreateTeamRes> createTeam(@RequestHeader("Authorization") String accessToken,
 		@RequestParam String teamName) {
-		PostCreateTeamRes postCreateTeamRes = teamService.createTeam(accessToken, teamName);
-
-		return new BaseResponse<>(postCreateTeamRes);
+		return new BaseResponse<>(teamService.createTeam(accessToken, teamName));
 	}
 
 	@GetMapping("/ban")
