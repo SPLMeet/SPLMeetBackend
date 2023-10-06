@@ -50,6 +50,9 @@ public class CoBuyPost {
 	@OneToMany(mappedBy = "coBuyPost")
 	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>(); // 게시물 이미지
 
+	@OneToMany(mappedBy = "coBuyPost")
+	private List<PayList> payLists = new ArrayList<>(); // 결제 리스트
+
 	@Builder
 	public CoBuyPost(Long idx, Long localMoney, String localName, String localDesription, String localAddress) {
 		this.idx = idx;
