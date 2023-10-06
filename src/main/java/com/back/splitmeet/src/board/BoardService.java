@@ -6,13 +6,15 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.CoBuyPost;
 import com.back.splitmeet.domain.CoBuyPostImg;
-import com.back.splitmeet.domain.GeneralPost;
 import com.back.splitmeet.domain.GeneralPostImg;
 import com.back.splitmeet.domain.repository.CoBuyPostRepository;
 import com.back.splitmeet.domain.repository.GeneralPostRepository;
+import com.back.splitmeet.domain.repository.PayListRepository;
 import com.back.splitmeet.src.board.dto.GetBoardRes;
 import com.back.splitmeet.src.board.dto.GetBoardsRes;
+import com.back.splitmeet.src.board.dto.GetCobuyRes;
 
 @Service
 public class BoardService {
@@ -20,13 +22,16 @@ public class BoardService {
 	private GeneralPostRepository generalPostRepository;
 	@Autowired
 	private CoBuyPostRepository coBuyPostRepository;
+	@Autowired
+	private PayListRepository payListRepository;
 
 	public GetBoardsRes boardList(String title) {
 		if (Objects.equals(title, "government")) {
 			List<GetBoardRes> board = generalPostRepository.findAll().stream().map(
 				generalPost -> GetBoardRes.builder()
 					.localId(generalPost.getLocalId())
-					.localPhoto(generalPost.getGeneralpostImgs().stream().map(GeneralPostImg::getImgUrl).toList())
+					.localPhoto(
+						generalPost.getGeneralpostImgs().stream().map(GeneralPostImg::getImgUrl).toList().get(0))
 					.localAddress(generalPost.getLocalAddress())
 					.localName(generalPost.getLocalName())
 					.build()
@@ -37,7 +42,7 @@ public class BoardService {
 			List<GetBoardRes> board = coBuyPostRepository.findAllByOrderByTimeLimit().stream().map(
 				coBuyPost -> GetBoardRes.builder()
 					.localId(coBuyPost.getIdx())
-					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList())
+					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList().get(0))
 					.localAddress(coBuyPost.getLocalAddress())
 					.localName(coBuyPost.getLocalName())
 					.timeLimit(coBuyPost.getTimeLimit())
@@ -49,7 +54,7 @@ public class BoardService {
 			List<GetBoardRes> board = coBuyPostRepository.findAllByOrderByTargetNumber().stream().map(
 				coBuyPost -> GetBoardRes.builder()
 					.localId(coBuyPost.getIdx())
-					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList())
+					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList().get(0))
 					.localAddress(coBuyPost.getLocalAddress())
 					.localName(coBuyPost.getLocalName())
 					.timeLimit(coBuyPost.getTimeLimit())
@@ -60,7 +65,20 @@ public class BoardService {
 		return null;
 	}
 
-	public GeneralPost boardDetail(Long id) {
-		return generalPostRepository.findById(id).orElse(null);
+	public GetCobuyRes boardDetail(Long id) {
+		CoBuyPost coBuyPost = coBuyPostRepository.findById(id).orElse(null);
+		Integer nowPeople = payListRepository.sumPersonCount(id);
+		if (coBuyPost == null) {
+			return null;
+		}
+		return GetCobuyRes.builder()
+			.localName(coBuyPost.getLocalName())
+			.localPlace(coBuyPost.getLocalAddress())
+			.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList())
+			.localMoney(coBuyPost.getLocalMoney())
+			.localDescription(coBuyPost.getLocalDesription())
+			.limitPeople(coBuyPost.getTargetNumber())
+			.nowPeople(nowPeople.longValue())
+			.build();
 	}
 }

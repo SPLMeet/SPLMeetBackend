@@ -1,5 +1,7 @@
 package com.back.splitmeet.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,6 +32,7 @@ public class CoBuyPostImg {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "idx")
+	@JsonBackReference
 	private CoBuyPost coBuyPost;    // 게시물 이미지가 속한 게시물
 
 	@Builder
