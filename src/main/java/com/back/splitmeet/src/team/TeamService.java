@@ -39,7 +39,7 @@ public class TeamService {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
-		if (userinfo == null || userinfo.getUserTeam() == null) {
+		if (userinfo == null || userinfo.getUserTeam() != null) {
 			return new PostCreateTeamRes(null);
 		}
 
