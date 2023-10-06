@@ -28,7 +28,7 @@ public class PayList {
 	private UserInfo userinfo; // 유저 정보
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "localId")
+	@JoinColumn(name = "idx")
 	private CoBuyPost coBuyPost; // 게시물 정보
 
 	@Column(nullable = false, columnDefinition = "BIGINT default 0")
