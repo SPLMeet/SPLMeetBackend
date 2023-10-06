@@ -42,7 +42,7 @@ public class ScheduleRegisterService {
 		try {
 			TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(req.getAccessToken());
 			UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
-			Long teamId = userInfo.getTeamId();
+			Long teamId = userInfo.getUserTeam().getTeamId();
 			Schedule schedule = new Schedule();
 			saveScheduleInRepository(req, schedule, teamId);
 			return true;

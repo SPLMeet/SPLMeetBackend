@@ -31,10 +31,9 @@ public class ScheduleService {
 	public ScheduleInquiryRes inquireSchedule(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
-		Long teamId = userinfo.getTeamId();
+		Long teamId = userinfo.getUserTeam().getTeamId();
 		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByStartTime(teamId);
 		ScheduleInquiryRes scheduleInquiryRes = new ScheduleInquiryRes(schedule);
-
 		return scheduleInquiryRes;
 	}
 }
