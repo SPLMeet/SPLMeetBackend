@@ -1,5 +1,7 @@
 package com.back.splitmeet.domain;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -30,6 +32,7 @@ public class GeneralPostImg {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "localId")
+	@JsonBackReference
 	private GeneralPost generalPost;
 
 	@Builder

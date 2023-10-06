@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.back.splitmeet.domain.CoBuyPostImg;
+import com.back.splitmeet.domain.GeneralPost;
 import com.back.splitmeet.domain.GeneralPostImg;
 import com.back.splitmeet.domain.repository.CoBuyPostRepository;
 import com.back.splitmeet.domain.repository.GeneralPostRepository;
@@ -59,7 +60,7 @@ public class BoardService {
 		return null;
 	}
 
-	public GetBoardRes boardDetail(Long id) {
-		return null; //수정 중
+	public GeneralPost boardDetail(Long id) {
+		return generalPostRepository.findById(id).orElse(null);
 	}
 }
