@@ -57,7 +57,7 @@ public class TeamService {
 		userinfo.setRole(RoleStatus.LEADER);
 		userInfoRepository.save(userinfo);
 
-		return new PostCreateTeamRes(userinfo.getUserId());
+		return new PostCreateTeamRes(userTeam.getTeamId());
 	}
 
 	/**
