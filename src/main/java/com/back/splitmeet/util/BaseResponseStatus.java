@@ -30,6 +30,11 @@ public enum BaseResponseStatus {
 	LEADER_OR_NOT_MEMBER(false, 2079, "팀장이거나 팀원이 아닙니다."),
 	ALREADY_IN_TEAM(false, 2080, "이미 팀에 속해있습니다."),
 
+	//3000번대 -> schedule status
+	ALREADY_IN_SCHEDULE(false, 3000, "이미 등록된 스케줄 입니다"),
+	SCHEDULE_NOT_CHANGED(false, 3001, "기존 스케줄과 바뀌지 않았습니다"),
+	SCHEDULE_ADD_FAIL(false, 3002, "스케줄 추가에 실패했습니다"),
+
 	DATABASE_ERROR(false, 4000, "데이터베이스 연결에 실패하였습니다."),
 	DELETE_USER_FAIL(false, 4008, "유저 정보 삭제에 실패하였습니다."),
 
