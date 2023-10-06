@@ -1,6 +1,6 @@
 package com.back.splitmeet.src.board.dto;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +17,6 @@ public class GetBoardRes {
 	// List<String> localPhoto;
 	String localPhoto;
 	// CoBuyPost
-	LocalDateTime timeLimit;
+	Date timeLimit;
 
 }

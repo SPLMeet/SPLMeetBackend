@@ -1,5 +1,7 @@
 package com.back.splitmeet.src.board;
 
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,7 +47,7 @@ public class BoardService {
 					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList().get(0))
 					.localAddress(coBuyPost.getLocalAddress())
 					.localName(coBuyPost.getLocalName())
-					.timeLimit(coBuyPost.getTimeLimit())
+					.timeLimit(Date.from(coBuyPost.getTimeLimit().atZone(ZoneId.systemDefault()).toInstant()))
 					.build()
 			).toList();
 			return new GetBoardsRes("기한 임박", board);
@@ -57,7 +59,7 @@ public class BoardService {
 					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList().get(0))
 					.localAddress(coBuyPost.getLocalAddress())
 					.localName(coBuyPost.getLocalName())
-					.timeLimit(coBuyPost.getTimeLimit())
+					.timeLimit(Date.from(coBuyPost.getTimeLimit().atZone(ZoneId.systemDefault()).toInstant()))
 					.build()
 			).toList();
 			return new GetBoardsRes("자리 임박", board);
