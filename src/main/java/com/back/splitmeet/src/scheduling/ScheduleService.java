@@ -33,10 +33,16 @@ public class ScheduleService {
 	public ScheduleInquiryRes inquireSchedule(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+		if(userinfo.getUserTeam() == null)
+			return new ScheduleInquiryRes(null, null, null);
+
 		Long teamId = userinfo.getUserTeam().getTeamId();
 		List<Schedule> schedule = scheduleInfoRepository.findAllByTeamIdOrderByStartTime(teamId);
+		if (schedule == null)
+			return new ScheduleInquiryRes(teamId, userinfo.getUserTeam().getTeamName(), null);
+
 		List<ScheduleInquiryInfo> scheduleInquiryInfos = new ArrayList<>();
-		for(Schedule schedule_temp : schedule){
+		for (Schedule schedule_temp : schedule) {
 			ScheduleInquiryInfo scheduleInquiryInfo = new ScheduleInquiryInfo(
 				schedule_temp.getScheduleId(),
 				schedule_temp.getStartTime(),
@@ -45,7 +51,8 @@ public class ScheduleService {
 				schedule_temp.getCost());
 			scheduleInquiryInfos.add(scheduleInquiryInfo);
 		}
-		ScheduleInquiryRes scheduleInquiryRes = new ScheduleInquiryRes(userinfo.getUserTeam().getTeamId(),userinfo.getUserTeam().getTeamName() ,scheduleInquiryInfos);
+		ScheduleInquiryRes scheduleInquiryRes = new ScheduleInquiryRes(userinfo.getUserTeam().getTeamId(),
+			userinfo.getUserTeam().getTeamName(), scheduleInquiryInfos);
 		return scheduleInquiryRes;
 	}
 }
