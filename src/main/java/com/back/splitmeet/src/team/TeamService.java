@@ -13,7 +13,6 @@ import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.domain.repository.UserTeamRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
-import com.back.splitmeet.src.team.dto.PostCreateTeamRes;
 import com.back.splitmeet.src.team.dto.TeamBanRes;
 import com.back.splitmeet.util.BaseResponseStatus;
 
@@ -35,16 +34,16 @@ public class TeamService {
 	 * @return
 	 */
 	@Transactional
-	public PostCreateTeamRes createTeam(String accessToken, String teamName) {
+	public Long createTeam(String accessToken, String teamName) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
-		if (userinfo == null || userinfo.getUserTeam() == null) {
-			return new PostCreateTeamRes(null);
+		if (userinfo == null || userinfo.getUserTeam() != null) {
+			return null;
 		}
 
 		if (userinfo.getRole() != RoleStatus.NONE) {
-			return new PostCreateTeamRes(null);
+			return null;
 		}
 
 		UserTeam userTeam = new UserTeam();
@@ -57,7 +56,7 @@ public class TeamService {
 		userinfo.setRole(RoleStatus.LEADER);
 		userInfoRepository.save(userinfo);
 
-		return new PostCreateTeamRes(userTeam.getTeamId());
+		return userTeam.getTeamId();
 	}
 
 	/**
