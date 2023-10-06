@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.back.splitmeet.src.board.dto.GetBoardRes;
+import com.back.splitmeet.domain.GeneralPost;
 import com.back.splitmeet.src.board.dto.GetBoardsRes;
 import com.back.splitmeet.util.BaseResponse;
 
@@ -24,8 +24,7 @@ public class BoardController {
 	}
 
 	@GetMapping("/{id}")
-	public BaseResponse<GetBoardRes> boardDetail(@PathVariable("id") Long id) {
-		GetBoardRes getBoardRes = boardService.boardDetail(id);
-		return new BaseResponse<>(getBoardRes);
+	public BaseResponse<GeneralPost> boardDetail(@PathVariable("id") Long id) {
+		return new BaseResponse<>(boardService.boardDetail(id));
 	}
 }

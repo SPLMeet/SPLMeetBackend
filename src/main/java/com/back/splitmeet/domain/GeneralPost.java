@@ -3,12 +3,13 @@ package com.back.splitmeet.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Builder;
@@ -46,6 +47,7 @@ public class GeneralPost {
 	private String localPhone; // 게시물 전화번호
 
 	@OneToMany(mappedBy = "generalPost")
+	@JsonManagedReference
 	private List<GeneralPostImg> generalpostImgs = new ArrayList<>();
 
 	@Builder
@@ -59,6 +61,5 @@ public class GeneralPost {
 		this.localAddress = localAddress;
 		this.localPhone = localPhone;
 	}
-
 
 }
