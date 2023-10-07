@@ -11,7 +11,6 @@ import com.back.splitmeet.domain.repository.CoBuyPostImgRepository;
 import com.back.splitmeet.domain.repository.CoBuyPostRepository;
 import com.back.splitmeet.domain.repository.GeneralPostRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
-import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.search.dto.SearchRes;
 
 import lombok.RequiredArgsConstructor;
@@ -25,8 +24,7 @@ public class SearchService {
 	private final GeneralPostRepository generalPostRepository;
 	private final CoBuyPostImgRepository generalPostImgRepository;
 
-	public List<SearchRes> searchPlace(String accessToken, String keyword) {
-		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+	public List<SearchRes> searchPlace(String keyword) {
 
 		List<SearchRes> searchRes = new ArrayList<>();
 
