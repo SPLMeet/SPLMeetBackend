@@ -33,22 +33,23 @@ public class ScheduleController {
 	private ScheduleRegisterService scheduleRegisterService;
 
 	@GetMapping("/inquiry")
-	public DeferredResult<BaseResponse<ScheduleInquiryRes>> inquireSchedule(@RequestParam(value = "Authorization") String accessToken, @RequestParam(value = "Option")Boolean option) {
+	public DeferredResult<BaseResponse<ScheduleInquiryRes>> inquireSchedule(
+		@RequestParam(value = "Authorization") String accessToken, @RequestParam(value = "Option") Boolean option) {
 		DeferredResult<BaseResponse<ScheduleInquiryRes>> deferredResult = new DeferredResult<>();
 
-		if(option){
+		if (option) {
 			ScheduleInquiryRes scheduleInquiryRes = scheduleService.inquireSchedule(accessToken);
 			BaseResponse<ScheduleInquiryRes> response = new BaseResponse<>(scheduleInquiryRes);
 			deferredResult.setResult(response);
-		}
-		else if(!option){
+		} else if (!option) {
 			result.add(deferredResult);
 		}
 		return deferredResult;
 	}
 
 	@PostMapping("/modify")
-	public BaseResponse<BaseResponseStatus> modifySchedule(@RequestHeader("Authorization") String accessToken, @RequestBody ScheduleModifyReq req) {
+	public BaseResponse<BaseResponseStatus> modifySchedule(@RequestHeader("Authorization") String accessToken,
+		@RequestBody ScheduleModifyReq req) {
 		Boolean scheduleModifyRes = scheduleRegisterService.modifySchedule(req);
 		if (scheduleModifyRes == null) {
 			return new BaseResponse<>(BaseResponseStatus.SCHEDULE_NOT_CHANGED);
@@ -56,7 +57,7 @@ public class ScheduleController {
 			ScheduleInquiryRes scheduleInquiryRes = scheduleService.inquireSchedule(accessToken);
 			BaseResponse<ScheduleInquiryRes> response = new BaseResponse<>(scheduleInquiryRes);
 
-			for(DeferredResult<BaseResponse<ScheduleInquiryRes>> deferredResult : result){
+			for (DeferredResult<BaseResponse<ScheduleInquiryRes>> deferredResult : result) {
 				deferredResult.setResult(response);
 				result.remove(deferredResult);
 			}
@@ -74,7 +75,7 @@ public class ScheduleController {
 		ScheduleInquiryRes scheduleInquiryRes = scheduleService.inquireSchedule(req.getAccessToken());
 		BaseResponse<ScheduleInquiryRes> response = new BaseResponse<>(scheduleInquiryRes);
 
-		for(DeferredResult<BaseResponse<ScheduleInquiryRes>> deferredResult : result){
+		for (DeferredResult<BaseResponse<ScheduleInquiryRes>> deferredResult : result) {
 			deferredResult.setResult(response);
 			result.remove(deferredResult);
 		}

@@ -17,9 +17,6 @@ import lombok.Setter;
 @Setter
 public class ScheduleModifyReq {
 
-	//@JsonProperty(value = "Authorization")
-//	private String accessToken;
-
 	@JsonProperty(value = "schedule_id")
 	private Long scheduleId;
 

@@ -15,10 +15,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ScheduleInquiryRes {
-
 	private Long teamId;
 
 	private String teamName;
+
+	private Long NumberOfMember;
 
 	@JsonProperty(value = "schedule")
 	private List<ScheduleInquiryInfo> scheduleInquiryInfo;
