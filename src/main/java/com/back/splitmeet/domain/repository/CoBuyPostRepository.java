@@ -12,4 +12,6 @@ public interface CoBuyPostRepository extends JpaRepository<CoBuyPost, Long> {
 	List<CoBuyPost> findAllByOrderByTimeLimit();
 
 	List<CoBuyPost> findAllByOrderByTargetNumber();
+
+	List<CoBuyPost> findALLByLocalNameContaining(String name);
 }
