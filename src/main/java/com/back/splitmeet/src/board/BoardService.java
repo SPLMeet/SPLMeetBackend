@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.back.splitmeet.domain.CoBuyPost;
 import com.back.splitmeet.domain.CoBuyPostImg;
+import com.back.splitmeet.domain.GeneralPost;
 import com.back.splitmeet.domain.GeneralPostImg;
 import com.back.splitmeet.domain.repository.CoBuyPostRepository;
 import com.back.splitmeet.domain.repository.GeneralPostRepository;
@@ -17,6 +18,7 @@ import com.back.splitmeet.domain.repository.PayListRepository;
 import com.back.splitmeet.src.board.dto.GetBoardRes;
 import com.back.splitmeet.src.board.dto.GetBoardsRes;
 import com.back.splitmeet.src.board.dto.GetCobuyRes;
+import com.back.splitmeet.src.board.dto.GetGeneralRes;
 
 @Service
 public class BoardService {
@@ -81,6 +83,26 @@ public class BoardService {
 			.localDescription(coBuyPost.getLocalDesription())
 			.limitPeople(coBuyPost.getTargetNumber())
 			.nowPeople(nowPeople.longValue())
+			.build();
+	}
+
+	/**
+	 * 일반게시물 디테일 조회
+	 *
+	 */
+	public GetGeneralRes generalDetail(Long id) {
+		GeneralPost generalPost = generalPostRepository.findById(id).orElse(null);
+		if (generalPost == null) {
+			return null;
+		}
+		return GetGeneralRes.builder()
+			.localName(generalPost.getLocalName())
+			.localAddress(generalPost.getLocalAddress())
+			.localPhoto(generalPost.getGeneralpostImgs().stream().map(GeneralPostImg::getImgUrl).toList())
+			.localMoneyDescription(generalPost.getLocalMoneyDescription())
+			.localWeb(generalPost.getLocalWeb())
+			.localTime(generalPost.getLocalTime())
+			.localPhone(generalPost.getLocalPhone())
 			.build();
 	}
 }
