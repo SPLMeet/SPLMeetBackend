@@ -1,6 +1,8 @@
 package com.back.splitmeet.src.scheduling.dto;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -17,17 +19,5 @@ import lombok.Setter;
 @Setter
 public class ScheduleModifyReq {
 
-	//@JsonProperty(value = "Authorization")
-//	private String accessToken;
-
-	@JsonProperty(value = "schedule_id")
-	private Long scheduleId;
-
-	private ZonedDateTime startTime;
-
-	private ZonedDateTime endTime;
-
-	private String place;
-
-	private Integer cost;
+	private List<ScheduleModifyInfo>  modifyList = new ArrayList();
 }
