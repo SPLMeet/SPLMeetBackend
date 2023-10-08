@@ -47,4 +47,10 @@ public class SplitService {
 			.teamId(requester.getUserTeam().getTeamId())
 			.build();
 	}
+
+	private String makeSplitUrl(String code, Long money) {
+		return "https://qr.kakaopay.com/"
+			+ code
+			+ Long.toHexString(money * 524288).toLowerCase();
+	}
 }
