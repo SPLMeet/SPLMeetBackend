@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.auth.dto.ChkUserInfoRes;
@@ -15,11 +16,13 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Service
 public class AuthService {
+	private final UserInfoRepository userInfoRepository;
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Autowired
-	public AuthService(JwtTokenProvider jwtTokenProvider) {
+	public AuthService(JwtTokenProvider jwtTokenProvider, UserInfoRepository userInfoRepository) {
 		this.jwtTokenProvider = jwtTokenProvider;
+		this.userInfoRepository = userInfoRepository;
 	}
 
 	public String decryptBase64UrlToken(String idToken) {
@@ -29,7 +32,10 @@ public class AuthService {
 
 	public ChkUserInfoRes getUserInfo(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
-		ChkUserInfoRes chkUserInfoRes = new ChkUserInfoRes(tokenInfo.getUserId(), tokenInfo.getEmail(),
+
+		ChkUserInfoRes chkUserInfoRes = new ChkUserInfoRes(tokenInfo.getUserId(), userInfoRepository.findOneByUserId(
+			tokenInfo.getUserId()).getUserTeam().getTeamId(), userInfoRepository.findOneByUserId(
+			tokenInfo.getUserId()).getRole(), tokenInfo.getEmail(),
 			tokenInfo.getName(), tokenInfo.getPicture());
 		return chkUserInfoRes;
 	}
