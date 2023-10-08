@@ -64,4 +64,9 @@ public class TeamController {
 		GetTeamTotalRes teamMembers = teamService.getTeamMembers(accessToken);
 		return new BaseResponse<>(teamMembers);
 	}
+
+	@GetMapping("/out")
+	public BaseResponse<BaseResponseStatus> outTeam(@RequestHeader("Authorization") String accessToken) {
+		return new BaseResponse<>(teamService.leaveTeam(accessToken));
+	}
 }
