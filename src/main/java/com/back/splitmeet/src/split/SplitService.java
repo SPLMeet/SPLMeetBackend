@@ -11,6 +11,7 @@ import com.back.splitmeet.domain.repository.UserTeamRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.split.dto.SplitCheckRes;
+import com.back.splitmeet.src.split.dto.SplitEndRes;
 import com.back.splitmeet.src.split.dto.SplitRegistReq;
 import com.back.splitmeet.src.split.dto.SplitRegistRes;
 import com.back.splitmeet.src.split.dto.SplitStartReq;
@@ -101,6 +102,24 @@ public class SplitService {
 		userInfoRepository.save(requester);
 		return SplitStartRes.builder()
 			.teamSettleStatus(true)
+			.build();
+	}
+
+	public SplitEndRes end(String accessToken) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo requester = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (requester.getUserTeam().getTeamId() == 0 || !requester.getRole().equals(RoleStatus.LEADER)) {
+			return null;
+		}
+		if (!requester.getUserTeam().getTeamSettleStatus()) {
+			return null;
+		}
+		requester.getUserTeam().setTeamSettleStatus(false);
+		requester.getUserTeam().setTeamTotalCost(0L);
+		userInfoRepository.save(requester);
+		return SplitEndRes.builder()
+			.teamSettleStatus(false)
 			.build();
 	}
 }
