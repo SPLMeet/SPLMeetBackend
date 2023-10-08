@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
@@ -33,10 +34,21 @@ public class AuthService {
 	public ChkUserInfoRes getUserInfo(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 
-		ChkUserInfoRes chkUserInfoRes = new ChkUserInfoRes(tokenInfo.getUserId(), userInfoRepository.findOneByUserId(
-			tokenInfo.getUserId()).getUserTeam().getTeamId(), userInfoRepository.findOneByUserId(
-			tokenInfo.getUserId()).getRole(), tokenInfo.getEmail(),
-			tokenInfo.getName(), tokenInfo.getPicture());
+		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		Long teamId = 0L;
+		if (userInfo != null && userInfo.getUserTeam() != null) {
+			teamId = userInfo.getUserTeam().getTeamId();
+		}
+
+		ChkUserInfoRes chkUserInfoRes = ChkUserInfoRes.builder()
+			.userId(tokenInfo.getUserId())
+			.teamId(teamId)
+			.role((userInfo != null) ? userInfo.getRole() : null)
+			.email(tokenInfo.getEmail())
+			.name(tokenInfo.getName())
+			.picture(tokenInfo.getPicture()).build();
+		
 		return chkUserInfoRes;
 	}
 }
