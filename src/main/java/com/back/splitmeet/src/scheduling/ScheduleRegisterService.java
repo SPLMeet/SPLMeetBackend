@@ -10,6 +10,7 @@ import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.scheduling.dto.ScheduleAddReq;
+import com.back.splitmeet.src.scheduling.dto.ScheduleModifyInfo;
 import com.back.splitmeet.src.scheduling.dto.ScheduleModifyReq;
 
 import jakarta.transaction.Transactional;
@@ -28,13 +29,10 @@ public class ScheduleRegisterService {
 	}
 
 	public Boolean modifySchedule(ScheduleModifyReq req) {
-		Schedule schedule = scheduleInfoRepository.findOneByScheduleId(req.getScheduleId());
-
-		if (schedule.getCost() == req.getCost() && schedule.getPlace() == req.getPlace()
-			&& schedule.getEndTime() == req.getEndTime() && schedule.getStartTime() == req.getStartTime()) {
-			return null;
+		for (ScheduleModifyInfo modifyInfo : req.getModifyList()) {
+			Schedule schedule = scheduleInfoRepository.findOneByScheduleId(modifyInfo.getScheduleId());
+			saveScheduleInRepository(modifyInfo, schedule);
 		}
-		saveScheduleInRepository(req, schedule);
 		return true;
 	}
 
@@ -53,12 +51,11 @@ public class ScheduleRegisterService {
 	}
 
 	@Transactional
-	public void saveScheduleInRepository(ScheduleModifyReq req, Schedule schedule) {
-		//같은 값은 set 안하도록
-		schedule.setStartTime(req.getStartTime());
-		schedule.setEndTime(req.getEndTime());
-		schedule.setPlace(req.getPlace());
-		schedule.setCost(req.getCost());
+	public void saveScheduleInRepository(ScheduleModifyInfo modifyInfo, Schedule schedule) {
+		schedule.setStartTime(modifyInfo.getStartTime());
+		schedule.setEndTime(modifyInfo.getEndTime());
+		schedule.setPlace(modifyInfo.getPlace());
+		schedule.setCost(modifyInfo.getCost());
 		scheduleInfoRepository.save(schedule);
 	}
 
@@ -71,4 +68,5 @@ public class ScheduleRegisterService {
 		schedule.setTeamId(teamId);
 		scheduleInfoRepository.save(schedule);
 	}
+
 }
