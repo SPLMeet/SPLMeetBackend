@@ -11,6 +11,8 @@ import com.back.splitmeet.domain.repository.UserTeamRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.split.dto.SplitCheckRes;
+import com.back.splitmeet.src.split.dto.SplitRegistReq;
+import com.back.splitmeet.src.split.dto.SplitRegistRes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -30,5 +32,19 @@ public class SplitService {
 		}
 		return requester.getUserTeam().getUserInfo().stream()
 			.map(SplitCheckRes::new).toList();
+	}
+
+	public SplitRegistRes regist(String accessToken, SplitRegistReq req) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo requester = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (requester.getUserTeam().getTeamId() == 0 || !requester.getRole().equals(RoleStatus.LEADER)) {
+			return null;
+		}
+		requester.getUserTeam().setLeaderKakaoHash(req.getCode());
+		userInfoRepository.save(requester);
+		return SplitRegistRes.builder()
+			.teamId(requester.getUserTeam().getTeamId())
+			.build();
 	}
 }
