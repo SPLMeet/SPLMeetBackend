@@ -142,7 +142,7 @@ public class TeamService {
 		List<UserInfo> teamMembers = userInfoRepository.findAllByUserTeam(userTeam);
 		for (UserInfo member : teamMembers) {
 			member.setUserTeam(null);
-
+			member.setRole(RoleStatus.NONE);
 		}
 		userInfoRepository.saveAll(teamMembers);
 		userTeamRepository.delete(userTeam);
