@@ -9,4 +9,5 @@ public class SplitStatusRes {
 	private String url;
 	private Boolean status;
 	private Boolean isLeader;
+	private Long money;
 }

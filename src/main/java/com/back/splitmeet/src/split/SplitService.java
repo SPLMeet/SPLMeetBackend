@@ -13,6 +13,8 @@ import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.split.dto.SplitCheckRes;
 import com.back.splitmeet.src.split.dto.SplitRegistReq;
 import com.back.splitmeet.src.split.dto.SplitRegistRes;
+import com.back.splitmeet.src.split.dto.SplitStartReq;
+import com.back.splitmeet.src.split.dto.SplitStartRes;
 import com.back.splitmeet.src.split.dto.SplitStatusRes;
 
 import lombok.RequiredArgsConstructor;
@@ -52,7 +54,7 @@ public class SplitService {
 	private String makeSplitUrl(String code, Long money) {
 		return "https://qr.kakaopay.com/"
 			+ code
-			+ Long.toHexString(money * 524288).toLowerCase();
+			+ Long.toHexString(money.intValue() * 524288).toLowerCase();
 	}
 
 	public SplitStatusRes status(String accessToken) {
@@ -61,6 +63,7 @@ public class SplitService {
 
 		Boolean isLeader = false;
 		String url = null;
+		Long money = 0L;
 		if (requester.getUserTeam().getTeamId() == 0) {
 			return null;
 		}
@@ -68,15 +71,36 @@ public class SplitService {
 			isLeader = true;
 		}
 		if (requester.getUserTeam().getTeamSettleStatus()) {
+			money = requester.getUserTeam().getTeamTotalCost();
 			url = makeSplitUrl(
 				requester.getUserTeam().getLeaderKakaoHash(),
-				requester.getUserTeam().getTeamTotalCost()
+				money / requester.getUserTeam().getUserInfo().size()
 			);
 		}
+
 		return SplitStatusRes.builder()
 			.isLeader(isLeader)
 			.url(url)
 			.status(requester.getUserTeam().getTeamSettleStatus())
+			.money(money)
+			.build();
+	}
+
+	public SplitStartRes start(String accessToken, SplitStartReq req) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo requester = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		if (requester.getUserTeam().getTeamId() == 0 || !requester.getRole().equals(RoleStatus.LEADER)) {
+			return null;
+		}
+		if (requester.getUserTeam().getTeamSettleStatus()) {
+			return null;
+		}
+		requester.getUserTeam().setTeamSettleStatus(true);
+		requester.getUserTeam().setTeamTotalCost(req.getMoney());
+		userInfoRepository.save(requester);
+		return SplitStartRes.builder()
+			.teamSettleStatus(true)
 			.build();
 	}
 }
