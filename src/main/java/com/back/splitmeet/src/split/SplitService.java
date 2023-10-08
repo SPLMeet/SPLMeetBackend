@@ -13,6 +13,7 @@ import com.back.splitmeet.jwt.dto.TokenInfo;
 import com.back.splitmeet.src.split.dto.SplitCheckRes;
 import com.back.splitmeet.src.split.dto.SplitRegistReq;
 import com.back.splitmeet.src.split.dto.SplitRegistRes;
+import com.back.splitmeet.src.split.dto.SplitStatusRes;
 
 import lombok.RequiredArgsConstructor;
 
@@ -52,5 +53,30 @@ public class SplitService {
 		return "https://qr.kakaopay.com/"
 			+ code
 			+ Long.toHexString(money * 524288).toLowerCase();
+	}
+
+	public SplitStatusRes status(String accessToken) {
+		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
+		UserInfo requester = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
+
+		Boolean isLeader = false;
+		String url = null;
+		if (requester.getUserTeam().getTeamId() == 0) {
+			return null;
+		}
+		if (requester.getRole().equals(RoleStatus.LEADER)) {
+			isLeader = true;
+		}
+		if (requester.getUserTeam().getTeamSettleStatus()) {
+			url = makeSplitUrl(
+				requester.getUserTeam().getLeaderKakaoHash(),
+				requester.getUserTeam().getTeamTotalCost()
+			);
+		}
+		return SplitStatusRes.builder()
+			.isLeader(isLeader)
+			.url(url)
+			.status(requester.getUserTeam().getTeamSettleStatus())
+			.build();
 	}
 }
