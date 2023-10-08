@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.back.splitmeet.src.board.dto.GetBoardsRes;
 import com.back.splitmeet.src.board.dto.GetCobuyRes;
+import com.back.splitmeet.src.board.dto.GetGeneralRes;
 import com.back.splitmeet.util.BaseResponse;
 
 @RestController
@@ -27,4 +28,14 @@ public class BoardController {
 	public BaseResponse<GetCobuyRes> boardDetail(@PathVariable("id") Long id) {
 		return new BaseResponse<>(boardService.boardDetail(id));
 	}
+
+	/**
+	 * 일반게시물 디테일 조회
+	 *
+	 */
+	@GetMapping("/general/{id}")
+	public BaseResponse<GetGeneralRes> GeneralDetail(@PathVariable("id") Long id) {
+		return new BaseResponse<>(boardService.generalDetail(id));
+	}
+
 }

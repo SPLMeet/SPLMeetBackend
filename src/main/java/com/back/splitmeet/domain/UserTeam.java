@@ -4,9 +4,9 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -45,7 +45,7 @@ public class UserTeam {
 
 	private Long teamTotalCost; // 팀 총 비용
 
-	@OneToMany(mappedBy = "userTeam")
+	@OneToMany(mappedBy = "userTeam", cascade = CascadeType.ALL)
 	private List<UserInfo> userInfo = new ArrayList<>();
 
 	@Column(length = 20, columnDefinition = "VARCHAR(20) default 'NONE'")
