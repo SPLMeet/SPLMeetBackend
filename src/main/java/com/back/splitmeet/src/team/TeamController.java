@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.splitmeet.src.team.dto.GetTeamTotalRes;
 import com.back.splitmeet.src.team.dto.PostCreateTeamRes;
 import com.back.splitmeet.util.BaseResponse;
 import com.back.splitmeet.util.BaseResponseStatus;
@@ -56,5 +57,11 @@ public class TeamController {
 	public BaseResponse<BaseResponseStatus> joinTeam(@RequestHeader("Authorization") String accessToken,
 		@RequestParam String userEmail) {
 		return new BaseResponse<>(teamService.joinTeam(accessToken, userEmail));
+	}
+
+	@GetMapping("/member")
+	public BaseResponse<GetTeamTotalRes> getTeamMember(@RequestHeader("Authorization") String accessToken) {
+		GetTeamTotalRes teamMembers = teamService.getTeamMembers(accessToken);
+		return new BaseResponse<>(teamMembers);
 	}
 }

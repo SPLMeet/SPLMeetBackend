@@ -13,6 +13,8 @@ import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.domain.repository.UserTeamRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
 import com.back.splitmeet.jwt.dto.TokenInfo;
+import com.back.splitmeet.src.team.dto.GetTeamMemberRes;
+import com.back.splitmeet.src.team.dto.GetTeamTotalRes;
 import com.back.splitmeet.src.team.dto.TeamBanRes;
 import com.back.splitmeet.util.BaseResponseStatus;
 
@@ -184,7 +186,7 @@ public class TeamService {
 	 * @return
 	 */
 	@Transactional(readOnly = true)
-	public List<UserInfo> getTeamMembers(String accessToken) {
+	public GetTeamTotalRes getTeamMembers(String accessToken) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
@@ -195,7 +197,20 @@ public class TeamService {
 		}
 
 		// 팀에 속한 모든 유저들을 불러옴
-		return new ArrayList<>(userTeam.getUserInfo());
+		List<UserInfo> teamMembers = new ArrayList<>(userTeam.getUserInfo());
+
+		// 유저들의 정보를 UserDTO 리스트로 변환
+		List<GetTeamMemberRes> teamMemberDTOs = teamMembers.stream()
+			.map(member -> GetTeamMemberRes.builder()
+				.userName(member.getUserName())
+				.userProfile(member.getUserProfile())
+				.role(member.getRole())
+				.build())
+			.toList();
+
+		GetTeamTotalRes getTeamTotalRes = new GetTeamTotalRes(userTeam.getTeamName(), userTeam.getStartDate(),
+			userTeam.getEndDate(), userTeam.getTeamTotalCost(), teamMemberDTOs);
+		return getTeamTotalRes;
 	}
 
 }
