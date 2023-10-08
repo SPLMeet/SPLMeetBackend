@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -68,7 +69,7 @@ public class UserInfo {
 	@JoinColumn(name = "teamId")
 	private UserTeam userTeam; // 유저 팀
 
-	@OneToMany(mappedBy = "userinfo")
+	@OneToMany(mappedBy = "userinfo", cascade = CascadeType.ALL)
 	private List<PayList> orders = new ArrayList<>(); // 유저 결제 내역
 
 	@Builder(builderMethodName = "userBuilder", buildMethodName = "userBuild")
