@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,7 +48,7 @@ public class CoBuyPost {
 	@Column(nullable = false)
 	private LocalDateTime timeLimit; // 게시물 시간 제한
 
-	@OneToMany(mappedBy = "coBuyPost")
+	@OneToMany(mappedBy = "coBuyPost", cascade = CascadeType.ALL)
 	private List<CoBuyPostImg> cobuypostImgs = new ArrayList<>(); // 게시물 이미지
 
 	@Builder
