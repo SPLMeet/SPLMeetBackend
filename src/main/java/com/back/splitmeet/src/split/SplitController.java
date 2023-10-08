@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.back.splitmeet.src.split.dto.SplitCheckRes;
+import com.back.splitmeet.src.split.dto.SplitEndRes;
 import com.back.splitmeet.src.split.dto.SplitRegistReq;
 import com.back.splitmeet.src.split.dto.SplitRegistRes;
 import com.back.splitmeet.src.split.dto.SplitStartReq;
@@ -60,5 +61,13 @@ public class SplitController {
 		return splitStartRes == null ?
 			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
 			new BaseResponse<>(splitStartRes);
+	}
+
+	@PostMapping("/end")
+	public BaseResponse<SplitEndRes> end(@RequestHeader("Authorization") String accessToken) {
+		SplitEndRes splitEndRes = splitService.end(accessToken);
+		return splitEndRes == null ?
+			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
+			new BaseResponse<>(splitEndRes);
 	}
 }

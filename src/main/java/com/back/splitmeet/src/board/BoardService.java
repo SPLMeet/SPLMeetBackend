@@ -32,37 +32,52 @@ public class BoardService {
 	public GetBoardsRes boardList(String title) {
 		if (Objects.equals(title, "government")) {
 			List<GetBoardRes> board = generalPostRepository.findAll().stream().map(
-				generalPost -> GetBoardRes.builder()
-					.localId(generalPost.getLocalId())
-					.localPhoto(
-						generalPost.getGeneralpostImgs().stream().map(GeneralPostImg::getImgUrl).toList().get(0))
-					.localAddress(generalPost.getLocalAddress())
-					.localName(generalPost.getLocalName())
-					.build()
+				generalPost -> {
+					List<String> images = generalPost.getGeneralpostImgs()
+						.stream()
+						.map(GeneralPostImg::getImgUrl)
+						.toList();
+					String firstImage = images.isEmpty() ? null : images.get(0);
+					return GetBoardRes.builder()
+						.localId(generalPost.getLocalId())
+						.localPhoto(firstImage)
+						.localAddress(generalPost.getLocalAddress())
+						.localName(generalPost.getLocalName())
+						.build();
+				}
 			).toList();
 			return new GetBoardsRes("지자체", board);
 		}
 		if (Objects.equals(title, "time")) {
 			List<GetBoardRes> board = coBuyPostRepository.findAllByOrderByTimeLimit().stream().map(
-				coBuyPost -> GetBoardRes.builder()
-					.localId(coBuyPost.getIdx())
-					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList().get(0))
-					.localAddress(coBuyPost.getLocalAddress())
-					.localName(coBuyPost.getLocalName())
-					.timeLimit(Date.from(coBuyPost.getTimeLimit().atZone(ZoneId.systemDefault()).toInstant()))
-					.build()
+				coBuyPost -> {
+					List<String> images = coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList();
+					String firstImage = images.isEmpty() ? null : images.get(0);
+					return GetBoardRes.builder()
+						.localId(coBuyPost.getIdx())
+						.localPhoto(firstImage)
+						.localAddress(coBuyPost.getLocalAddress())
+						.localName(coBuyPost.getLocalName())
+						.timeLimit(Date.from(coBuyPost.getTimeLimit().atZone(ZoneId.systemDefault()).toInstant()))
+						.build();
+				}
 			).toList();
 			return new GetBoardsRes("기한 임박", board);
 		}
+
 		if (Objects.equals(title, "seat")) {
 			List<GetBoardRes> board = coBuyPostRepository.findAllByOrderByTargetNumber().stream().map(
-				coBuyPost -> GetBoardRes.builder()
-					.localId(coBuyPost.getIdx())
-					.localPhoto(coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList().get(0))
-					.localAddress(coBuyPost.getLocalAddress())
-					.localName(coBuyPost.getLocalName())
-					.timeLimit(Date.from(coBuyPost.getTimeLimit().atZone(ZoneId.systemDefault()).toInstant()))
-					.build()
+				coBuyPost -> {
+					List<String> images = coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList();
+					String firstImage = images.isEmpty() ? null : images.get(0);
+					return GetBoardRes.builder()
+						.localId(coBuyPost.getIdx())
+						.localPhoto(firstImage)
+						.localAddress(coBuyPost.getLocalAddress())
+						.localName(coBuyPost.getLocalName())
+						.timeLimit(Date.from(coBuyPost.getTimeLimit().atZone(ZoneId.systemDefault()).toInstant()))
+						.build();
+				}
 			).toList();
 			return new GetBoardsRes("자리 임박", board);
 		}
