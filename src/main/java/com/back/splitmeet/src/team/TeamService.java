@@ -164,6 +164,10 @@ public class TeamService {
 		UserInfo inviteUserInfo = userInfoRepository.findOneByUserEmail(userEmail);
 		UserInfo ownerUserInfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
+		if(inviteUserInfo == null){
+			return BaseResponseStatus.INVALID_AUTH;
+		}
+
 		if (inviteUserInfo.getUserTeam() != null) {
 			return BaseResponseStatus.ALREADY_IN_TEAM;
 		}
