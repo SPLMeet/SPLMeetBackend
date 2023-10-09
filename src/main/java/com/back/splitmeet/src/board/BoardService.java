@@ -1,9 +1,11 @@
 package com.back.splitmeet.src.board;
 
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,8 +35,10 @@ public class BoardService {
 		if (Objects.equals(title, "government")) {
 			List<GetBoardRes> board = generalPostRepository.findAll().stream().map(
 				generalPost -> {
-					List<String> images = generalPost.getGeneralpostImgs()
+					List<String> images = Optional.ofNullable(generalPost.getGeneralpostImgs())
+						.orElse(Collections.emptyList())  // null 대신 빈 목록 반환
 						.stream()
+						.filter(Objects::nonNull)  // null 값 제거
 						.map(GeneralPostImg::getImgUrl)
 						.toList();
 					String firstImage = images.isEmpty() ? null : images.get(0);
@@ -51,7 +55,12 @@ public class BoardService {
 		if (Objects.equals(title, "time")) {
 			List<GetBoardRes> board = coBuyPostRepository.findAllByOrderByTimeLimit().stream().map(
 				coBuyPost -> {
-					List<String> images = coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList();
+					List<String> images = Optional.ofNullable(coBuyPost.getCobuypostImgs())
+						.orElse(Collections.emptyList())  // null 대신 빈 목록 반환
+						.stream()
+						.filter(Objects::nonNull)  // null 값 제거
+						.map(CoBuyPostImg::getImgUrl)
+						.toList();
 					String firstImage = images.isEmpty() ? null : images.get(0);
 					return GetBoardRes.builder()
 						.localId(coBuyPost.getIdx())
@@ -68,7 +77,12 @@ public class BoardService {
 		if (Objects.equals(title, "seat")) {
 			List<GetBoardRes> board = coBuyPostRepository.findAllByOrderByTargetNumber().stream().map(
 				coBuyPost -> {
-					List<String> images = coBuyPost.getCobuypostImgs().stream().map(CoBuyPostImg::getImgUrl).toList();
+					List<String> images = Optional.ofNullable(coBuyPost.getCobuypostImgs())
+						.orElse(Collections.emptyList())  // null 대신 빈 목록 반환
+						.stream()
+						.filter(Objects::nonNull)  // null 값 제거
+						.map(CoBuyPostImg::getImgUrl)
+						.toList();
 					String firstImage = images.isEmpty() ? null : images.get(0);
 					return GetBoardRes.builder()
 						.localId(coBuyPost.getIdx())
