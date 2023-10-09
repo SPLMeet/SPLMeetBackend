@@ -5,6 +5,7 @@ import java.nio.charset.StandardCharsets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.RoleStatus;
 import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.jwt.JwtTokenProvider;
@@ -44,7 +45,7 @@ public class AuthService {
 		ChkUserInfoRes chkUserInfoRes = ChkUserInfoRes.builder()
 			.userId(tokenInfo.getUserId())
 			.teamId(teamId)
-			.role((userInfo != null) ? userInfo.getRole() : null)
+			.role((userInfo != null) ? userInfo.getRole() : RoleStatus.NONE)
 			.email(tokenInfo.getEmail())
 			.name(tokenInfo.getName())
 			.picture(tokenInfo.getPicture()).build();
