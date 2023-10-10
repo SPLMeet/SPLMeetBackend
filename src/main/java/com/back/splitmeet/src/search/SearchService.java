@@ -29,17 +29,23 @@ public class SearchService {
 		List<SearchRes> searchRes = new ArrayList<>();
 
 		List<CoBuyPost> coBuyPosts = coBuyPostRepository.findALLByLocalNameContaining(keyword);
-		for (CoBuyPost e : coBuyPosts) {
-			searchRes.add(
-				new SearchRes(0L, e.getIdx(), e.getLocalName(), e.getLocalAddress(),
-					coBuyPostImgRepository.findFirstByPostImgId(e.getIdx()).getImgUrl(), e.getLocalMoney()));
+
+		if(coBuyPosts != null) {
+			for (CoBuyPost e : coBuyPosts) {
+				searchRes.add(
+					new SearchRes(0L, e.getIdx(), e.getLocalName(), e.getLocalAddress(),
+						e.getCobuypostImgs().get(0).getImgUrl(), e.getLocalMoney()));
+			}
 		}
 
 		List<GeneralPost> generalPosts = generalPostRepository.findALLByLocalNameContaining(keyword);
-		for (GeneralPost e : generalPosts) {
-			searchRes.add(
-				new SearchRes(1L, e.getLocalId(), e.getLocalName(), e.getLocalAddress(),
-					generalPostImgRepository.findFirstByPostImgId(e.getLocalId()).getImgUrl(), null));
+
+		if(generalPosts != null) {
+			for (GeneralPost e : generalPosts) {
+				searchRes.add(
+					new SearchRes(1L, e.getLocalId(), e.getLocalName(), e.getLocalAddress(),
+						e.getGeneralpostImgs().get(0).getImgUrl(), null));
+			}
 		}
 
 		return searchRes;
