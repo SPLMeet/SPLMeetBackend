@@ -6,6 +6,7 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.back.splitmeet.domain.PayList;
 import com.back.splitmeet.domain.RoleStatus;
 import com.back.splitmeet.domain.UserInfo;
 import com.back.splitmeet.domain.repository.PayListRepository;
@@ -117,7 +118,7 @@ public class UserService {
 		kakaoLoginRes.setRefreshToken(refreshToken);
 	}
 
-	public List<GetReceiptRes> getReceipt(String accessToken, Long userId) {
+	public List<PayList> getReceipt(String accessToken, Long userId) {
 		TokenInfo tokenInfo = jwtTokenProvider.getUserInfoFromAcs(accessToken);
 		UserInfo userinfo = userInfoRepository.findOneByUserId(tokenInfo.getUserId());
 
