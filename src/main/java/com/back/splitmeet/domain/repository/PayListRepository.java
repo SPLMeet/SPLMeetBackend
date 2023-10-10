@@ -12,7 +12,7 @@ import com.back.splitmeet.src.user.dto.GetReceiptRes;
 
 @Repository
 public interface PayListRepository extends JpaRepository<PayList, Long> {
-	List<GetReceiptRes> findALLByUserinfo(UserInfo userinfo);
+	List<PayList> findALLByUserinfo(UserInfo userinfo);
 
 	//@Query("select COALESCE(sum(r.dogCount),0) from Reservation r where r.companyId = :companyId"
 	@Query("select COALESCE(sum(r.personCount),0) from PayList r where r.coBuyPost.idx = :idx")

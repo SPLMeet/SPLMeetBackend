@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.back.splitmeet.domain.PayList;
 import com.back.splitmeet.domain.repository.UserInfoRepository;
 import com.back.splitmeet.src.auth.AuthService;
 import com.back.splitmeet.src.user.dto.GetMemberToIdtoken;
@@ -103,9 +104,9 @@ public class UserController {
 	}
 
 	@GetMapping("/receipt/{userId}")
-	public BaseResponse<List<GetReceiptRes>> getReceipt(@RequestHeader("Authorization") String accessToken,
+	public BaseResponse<List<PayList>> getReceipt(@RequestHeader("Authorization") String accessToken,
 		@PathVariable("userId") Long userId) {
-		List<GetReceiptRes> ResceiptList = userService.getReceipt(accessToken, userId);
+		List<PayList> ResceiptList = userService.getReceipt(accessToken, userId);
 		return ResceiptList == null ?
 			new BaseResponse<>(BaseResponseStatus.INVALID_AUTH) :
 			new BaseResponse<>(ResceiptList);

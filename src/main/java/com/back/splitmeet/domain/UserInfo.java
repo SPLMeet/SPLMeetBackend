@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -70,6 +72,7 @@ public class UserInfo {
 	private UserTeam userTeam; // 유저 팀
 
 	@OneToMany(mappedBy = "userinfo", cascade = CascadeType.ALL)
+	@JsonBackReference
 	private List<PayList> orders = new ArrayList<>(); // 유저 결제 내역
 
 	@Builder(builderMethodName = "userBuilder", buildMethodName = "userBuild")
