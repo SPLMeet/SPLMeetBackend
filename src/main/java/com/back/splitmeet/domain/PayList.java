@@ -1,6 +1,7 @@
 package com.back.splitmeet.domain;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -26,7 +27,7 @@ public class PayList {
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userId")
-	@JsonManagedReference
+	@JsonBackReference
 	private UserInfo userinfo; // 유저 정보
 
 	@ManyToOne(fetch = FetchType.LAZY)
