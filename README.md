@@ -2,10 +2,19 @@
 
 > SPLMeet BACK-End WEB Project
 
-<div align=center>
+<div align="center">
+	
+![splt](https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/6b3c5c32-595a-431f-a26f-cd86b0587772)
+</div>
+
+
+
+
   
 </div>
 <h2 align=center>✈ 여행 경비 효율 앱 : 여행 공동구매 서비스, SPLMeet 🚅</h2>
+<img width="1103" alt="Screenshot 2024-01-27 at 21 49 37" src="https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/8afde38c-d2cc-4f61-8a96-cd2711df868d">
+
 <div align=center>
   
 </div>
@@ -14,9 +23,7 @@
 
 ## API Docs
 
-### 💎 [SPLMeet BACK-End WEB API DOCs Swagger](https://readyvery.com/swagger-ui/index.html#/)
-
-
+### 💎 [SPLMeet BACK-End WEB API DOCs Swagger](https://docs.google.com/spreadsheets/d/1lrVwWv76uEyG5XWWjuCfm_nFn9lmmEo6/edit#gid=990061567)
 ## 기술스택
 
 <p>
@@ -40,6 +47,7 @@
   - mysql
   - JPA
 ## ERD
+![splmeet](https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/e4cfc400-93d4-4fb7-be9f-f54404578904)
 
 
 
@@ -54,11 +62,6 @@ Start
 ```sh
 java -jar soft-0.0.1-SNAPSHOT.jar
 ```
-
-## 개발 일지
-
-- 백엔드 프로젝트 생성(• SpringBoot v3.1.5 , • Java v17 ) (23/10/13) - `commit` : 6be3eb9
-- 
 
 ## Author
 
