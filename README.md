@@ -4,7 +4,7 @@
 
 <div align="center">
 	
-![splt](https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/6b3c5c32-595a-431f-a26f-cd86b0587772)
+<img alt="Screenshot 2024-01-27 at 21 49 37" src="https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/6b3c5c32-595a-431f-a26f-cd86b0587772" style="border:1px solid; border-radius:30px;">
 </div>
 
 
@@ -13,10 +13,10 @@
   
 </div>
 <h2 align=center>✈ 여행 경비 효율 앱 : 여행 공동구매 서비스, SPLMeet 🚅</h2>
-<img width="1103" alt="Screenshot 2024-01-27 at 21 49 37" src="https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/8afde38c-d2cc-4f61-8a96-cd2711df868d">
+
 
 <div align=center>
-  
+  <img width="1103" alt="Screenshot 2024-01-27 at 21 49 37" src="https://github.com/SPLMeet/SPLMeetBackend/assets/50243183/8afde38c-d2cc-4f61-8a96-cd2711df868d">
 </div>
 
 
@@ -24,6 +24,11 @@
 ## API Docs
 
 ### 💎 [SPLMeet BACK-End WEB API DOCs Swagger](https://docs.google.com/spreadsheets/d/1lrVwWv76uEyG5XWWjuCfm_nFn9lmmEo6/edit#gid=990061567)
+
+## Access App Store
+
+### 🏬 [ONE Store](https://m.onestore.co.kr/mobilepoc/apps/appsDetail.omp?prodId=0000772160)
+
 ## 기술스택
 
 <p>
