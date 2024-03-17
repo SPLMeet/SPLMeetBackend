@@ -23,7 +23,7 @@
 
 ## API Docs
 
-### 💎 [SPLMeet BACK-End WEB API DOCs Swagger](https://docs.google.com/spreadsheets/d/1lrVwWv76uEyG5XWWjuCfm_nFn9lmmEo6/edit#gid=990061567)
+### 💎 [SPLMeet BACK-End WEB API DOCs](https://docs.google.com/spreadsheets/d/1lrVwWv76uEyG5XWWjuCfm_nFn9lmmEo6/edit#gid=990061567)
 
 ## Access App Store
 
